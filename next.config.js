@@ -5,7 +5,7 @@ const withMDX = require("@next/mdx")();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: "/sliceofvglife",
+    basePath: process.env.NODE_ENV === "development" ? "" : "/sliceofvglife",
     output: "export" // Outputs a Single-Page Application (SPA).
 };
 

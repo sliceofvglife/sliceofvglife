@@ -20,6 +20,7 @@ interface CategoryConfig {
 interface ComicConfig {
     photo: string;
     title: string;
+    version?: string;
     date: string;
     category: string[];
 }
@@ -114,7 +115,9 @@ export function collectComicSync(
         commentary,
         date: comic.date,
         href: `/comic/${id}`,
-        src: `${COMICS_IMAGE_URL}/${comicPhoto}`,
+        src:
+            `${COMICS_IMAGE_URL}/${comicPhoto}` +
+            (comic.version !== undefined ? `?v=${comic.version}` : ""),
         width: size.width!,
         height: size.height!
     };
