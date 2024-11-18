@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -38,7 +38,7 @@ class App extends React.Component<AppProps> {
                     ></meta>
                 </Head>
                 <Provider store={store}>
-                    <Router basename={process.env.PUBLIC_URL}>
+                    <Router>
                         <div className="App">
                             <Menu />
                             {this.props.children}
