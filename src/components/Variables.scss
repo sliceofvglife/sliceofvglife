@@ -1,0 +1,43 @@
+$white-color: rgb(249, 249, 251);
+$yellow-bright-color: #F9F871;
+$link-blue-color: #409bc9;
+$text-white-color: #f5f5f5;
+$text-black-color: rgb(23, 23, 23);
+$text-hover-color: #df0101;
+$text-selected-color: #004dbe;
+$menu-text-color: $text-white-color;
+$menu-hover-color: $yellow-bright-color;
+$body-font-family: system-ui, -apple-system, "Segoe UI";
+
+$menu-background-color: #2A2C1E;
+$menu-dark-color: #355c60;
+$body-background-color: $white-color;
+$footer-background-color: #2A2C1E;
+$footer-copyright-background-color: rgba(0, 0, 0, 0.2);
+
+$home-player-section-background-color: #AAAD9B;
+
+$editor-background-color: rgba(255, 255, 255, 0.7);
+$editor-shadow-color: rgb(0 0 0 / 50%);
+
+$player-background-color: rgba(255, 255, 255, 0.7);
+$player-shadow-color: rgb(0 0 0 / 50%);
+$player-light-color: #8FDA83;
+$player-dark-color: #3F4756;
+
+$note-background-color: $yellow-bright-color;
+$note-text-color: #8C5261;
+
+$games-margin-top: 2em;
+$games-title-text-color: #2F4858;
+
+$game-readme-background-color: $white-color;
+$game-readme-text-color: $text-black-color;
+
+$learn-margin-top: 2em;
+$learn-background-color: $white-color;
+$learn-toc-category-margin-top: 1em;
+$learn-toc-category-text-color: $text-black-color;
+$learn-toc-article-margin-left: 1em;
+$learn-toc-article-text-color: rgb(102, 102, 102);
+$learn-article-text-color: $text-black-color;

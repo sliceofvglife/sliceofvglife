@@ -1,0 +1,125 @@
+@import "./Common";
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: $menu-background-color;
+    flex-grow: 0;
+
+    @include media-breakpoint-down(md) {
+        min-height: 5.25em;
+    }
+
+    a {
+        color: $menu-text-color;
+        text-decoration: none;
+
+        &:hover {
+            color: $menu-hover-color;
+        }
+    }
+}
+
+.menu .items {
+    @include media-breakpoint-down(md) {
+        width: 100%;
+        transition: max-height 0.25s;
+        max-height: 0;
+        overflow: hidden;
+        margin-top: 5.25em;
+    }
+
+    @include media-breakpoint-up(md) {
+        display: inline-block;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .menu .items[class*="mai-active"] {
+        max-height: 8em;
+    }
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+
+    @include media-breakpoint-down(md) {
+        width: 100%;
+        background-color: #3b6054;
+        flex-direction: column;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+
+    @include media-breakpoint-up(md) {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        font-size: 1.25em;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1em;
+    }
+}
+
+.menu li {
+    font-weight: 500;
+
+    @include media-breakpoint-down(md) {
+        font-size: 1.25em;
+    }
+}
+
+.menu a {
+    color: $menu-text-color;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    color: $menu-hover-color;
+}
+
+.menu div {
+    display: inline-block;
+}
+
+.menu .home {
+    @include media-breakpoint-down(md) {
+        position: absolute;
+        top: 1em;
+        right: 1em;
+        font-size: 1.75em;
+        line-height: 1em;
+    }
+}
+
+.menu .toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-size: 1em;
+    color: $menu-text-color;
+
+    @include media-breakpoint-down(md) {
+        display: inline-block;
+        position: absolute;
+        top: 1em;
+        left: 1em;
+        font-size: 1.75em;
+        line-height: 1em;
+    }
+
+    @include media-breakpoint-up(md) {
+        display: none;
+    }
+}
+
+.menu .toggle:hover {
+    color: $menu-hover-color;
+}

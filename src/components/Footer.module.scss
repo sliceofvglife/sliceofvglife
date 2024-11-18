@@ -1,0 +1,10 @@
+@import "./Common";
+
+.footer {
+    background-color: $footer-background-color;
+    flex-grow: 0;
+}
+
+.footer_row {
+    height: 6em;
+}
