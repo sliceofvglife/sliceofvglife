@@ -38,7 +38,7 @@ class App extends React.Component<AppProps> {
                     ></meta>
                 </Head>
                 <Provider store={store}>
-                    <Router>
+                    <Router basename={process.env.PUBLIC_URL}>
                         <div className="App">
                             <Menu />
                             {this.props.children}
