@@ -14,6 +14,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import { unlockComic } from "./Archive";
 import Image from "next/image";
+import Link from "next/link";
 
 // Scale of comics
 const COMICS_SCALE = 2;
@@ -126,7 +127,7 @@ class Reader extends React.Component<ReaderProps> {
                             />
                             <div className={styles.toolbar}>
                                 {shortcuts.map((shortcut) => (
-                                    <a
+                                    <Link
                                         className={
                                             shortcut.enabled
                                                 ? styles.toolbar_enabled
@@ -144,7 +145,7 @@ class Reader extends React.Component<ReaderProps> {
                                                 icon={shortcut.icon}
                                             />
                                         </Suspense>
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                             <div className={styles.info}>

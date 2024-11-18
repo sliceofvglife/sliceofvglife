@@ -50,9 +50,9 @@ class Menu extends React.Component<MenuProps, MenuState> {
         return (
             <nav className={styles.menu + " " + (className || "")}>
                 <div className={styles.home}>
-                    <a href="/" aria-label="Back to the homepage">
+                    <Link href="/" aria-label="Back to the homepage">
                         <FontAwesomeIcon className="mai-fab" icon={faHome} />
-                    </a>
+                    </Link>
                 </div>
                 <div
                     className={
