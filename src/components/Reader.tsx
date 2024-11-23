@@ -1,4 +1,7 @@
 import React, { Suspense } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import styles from "./Reader.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -100,13 +103,9 @@ class Reader extends React.Component<ReaderProps> {
         unlockComic(comic.id);
 
         return (
-            <div
-                className={[className || "", styles.reader, "container"].join(
-                    " "
-                )}
-            >
-                <div className="row">
-                    <div className="col d-flex flex-column justify-content-center align-items-center">
+            <Container className={[className || "", styles.reader].join(" ")}>
+                <Row>
+                    <Col className="d-flex flex-column justify-content-center align-items-center">
                         <article
                             className={styles.image_wrapper}
                             style={{ width: `${comic.width * comic.scale}px` }}
@@ -184,9 +183,9 @@ class Reader extends React.Component<ReaderProps> {
                                 </section>
                             </section>
                         </article>
-                    </div>
-                </div>
-            </div>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }

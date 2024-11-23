@@ -1,4 +1,7 @@
 import React from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import ReactMarkdown from "react-markdown";
 import styles from "./About.module.scss";
 
@@ -18,17 +21,13 @@ class About extends React.Component<AboutProps> {
         const { className } = this.props;
 
         return (
-            <div
-                className={[className || "", styles.about, "container"].join(
-                    " "
-                )}
-            >
-                <div className="row justify-content-center">
-                    <div className="col-6">
+            <Container className={[className || "", styles.about].join(" ")}>
+                <Row className="justify-content-center">
+                    <Col className={styles.text_wrapper}>
                         <ReactMarkdown>{this.props.text}</ReactMarkdown>
-                    </div>
-                </div>
-            </div>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }

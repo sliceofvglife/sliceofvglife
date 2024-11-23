@@ -1,6 +1,7 @@
 @import "./Common";
 
 .archive {
+    flex-grow: 1;
     font-family: consolas;
 
     a {
@@ -30,7 +31,7 @@
 .filters_lists {
     display: flex;
     flex-direction: column;
-    row-gap: 1em;
+    row-gap: 1rem;
 }
 
 .filters_list {
@@ -38,7 +39,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: 1em;
+    column-gap: 1rem;
     margin: 0;
     padding: 0;
 
@@ -58,7 +59,7 @@
     }
 
     .icon {
-        width: 2.5em;
+        width: 2.5rem;
         aspect-ratio: 1/1;
         background-repeat: no-repeat;
         background-size: contain;
@@ -67,7 +68,7 @@
     }
 
     .title {
-        padding-top: 0.25em;
+        padding-top: 0.25rem;
         text-align: center;
     }
 
@@ -88,11 +89,11 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    row-gap: 2em;
-    column-gap: 2em;
+    row-gap: 2rem;
+    column-gap: 2rem;
     margin: 0;
-    margin-top: 3em;
-    margin-bottom: 3em;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
     padding: 0;
 
     // Add a last invisible element to fill up the space
@@ -112,16 +113,16 @@
         width: 100%;
         font-family: consolas;
         // Avoid text covered by image when scale up on hover
-        padding-top: 0.25em;
+        padding-top: 0.25rem;
         // Avoid too much space between lines
-        line-height: 1em;
+        line-height: 1rem;
     }
 
     @include media-breakpoint-up(sm) {
         .item {
-            height: 8em;
+            height: 8rem;
             flex-grow: 1;
-            margin: 0.5em;
+            margin: 0.5rem;
         }
     }
 
@@ -159,8 +160,8 @@
 
     .lock_icon {
         color: $menu-text-color;
-        width: 2em;
-        height: 2em;
+        width: 2rem;
+        height: 2rem;
     }
 }
 
@@ -171,5 +172,5 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    column-gap: 1em;
+    column-gap: 1rem;
 }

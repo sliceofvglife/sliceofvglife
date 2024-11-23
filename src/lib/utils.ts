@@ -189,7 +189,7 @@ export async function generateRssFeed(comics: ComicMetadata[]) {
         description: "Derniers comics de SliceOfVGLife",
         language: "fr-fr",
         site_url: WEBSITE_URL,
-        feed_url: `${WEBSITE_URL}/rss.xml`,
+        feed_url: `${WEBSITE_URL}/feed.xml`,
         image_url: `${WEBSITE_URL}/logo.jpeg`,
         pubDate: new Date(),
         copyright: `Tous droits réservés ${new Date().getFullYear()}`
@@ -207,5 +207,5 @@ export async function generateRssFeed(comics: ComicMetadata[]) {
     });
 
     // Write the RSS feed to a file as XML.
-    fs.writeFileSync("./public/rss.xml", feed.xml({ indent: true }));
+    fs.writeFileSync("./public/feed.xml", feed.xml({ indent: true }));
 }

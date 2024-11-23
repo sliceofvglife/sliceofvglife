@@ -1,4 +1,7 @@
 import React, { Suspense } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { ComicMetadata } from "./Reader";
 import styles from "./Archive.module.scss";
 import { NextRouter, withRouter } from "next/router";
@@ -259,13 +262,9 @@ class Archive extends React.Component<ArchiveProps> {
                 : {};
 
         return (
-            <div
-                className={[className || "", styles.archive, "container"].join(
-                    " "
-                )}
-            >
-                <div className="row">
-                    <div className={[styles.filters_lists, "col"].join(" ")}>
+            <Container className={[className || "", styles.archive].join(" ")}>
+                <Row>
+                    <Col className={styles.filters_lists}>
                         {this.renderCategories(
                             currentCategory,
                             this.props.categories
@@ -274,17 +273,17 @@ class Archive extends React.Component<ArchiveProps> {
                             currentCategory,
                             this.props.games
                         )}
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col">{this.renderComics(comics)}</div>
-                </div>
-                <div className="row justify-content-center">
-                    <div className="col-auto">
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>{this.renderComics(comics)}</Col>
+                </Row>
+                <Row className="justify-content-center">
+                    <Col xs={{ span: "auto" }}>
                         {this.renderPages(numPages, currentPage, pageQuery)}
-                    </div>
-                </div>
-            </div>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }

@@ -1,4 +1,7 @@
 import React, { Suspense } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -26,34 +29,35 @@ class Footer extends React.Component<FooterProps, FooterState> {
             <footer
                 className={[
                     styles.footer,
-                    "container-fluid",
                     "text-center",
                     "text-white",
                     className
                 ].join(" ")}
             >
-                <section
-                    className={[
-                        styles.footer_row,
-                        "row justify-content-center align-items-center"
-                    ].join(" ")}
-                >
-                    <div className="col-auto">
-                        <Link
-                            className="btn btn-outline-light btn-floating"
-                            href={GITHUB_URL}
-                            role="button"
-                            aria-label="Voir sur GitHub"
-                        >
-                            <Suspense fallback={<></>}>
-                                <FontAwesomeIcon
-                                    className="mai-fab"
-                                    icon={faGithub}
-                                />
-                            </Suspense>
-                        </Link>
-                    </div>
-                </section>
+                <Container fluid>
+                    <Row
+                        className={[
+                            styles.footer_row,
+                            "justify-content-center align-items-center"
+                        ].join(" ")}
+                    >
+                        <Col xs={{ span: "auto" }}>
+                            <Link
+                                className="btn btn-outline-light btn-floating"
+                                href={GITHUB_URL}
+                                role="button"
+                                aria-label="Voir sur GitHub"
+                            >
+                                <Suspense fallback={<></>}>
+                                    <FontAwesomeIcon
+                                        className="mai-fab"
+                                        icon={faGithub}
+                                    />
+                                </Suspense>
+                            </Link>
+                        </Col>
+                    </Row>
+                </Container>
             </footer>
         );
     }

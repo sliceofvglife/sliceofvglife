@@ -1,5 +1,5 @@
 .env.development
-public/rss.xml
+public/feed.xml
 public/cdn
 public/robots.txt
 out/
