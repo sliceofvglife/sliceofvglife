@@ -126,13 +126,14 @@ class Reader extends React.Component<ReaderProps> {
                                 unoptimized
                             />
                             <div className={styles.toolbar}>
-                                {shortcuts.map((shortcut) => (
+                                {shortcuts.map((shortcut, i) => (
                                     <Link
                                         className={
                                             shortcut.enabled
                                                 ? styles.toolbar_enabled
                                                 : styles.toolbar_disabled
                                         }
+                                        key={i.toString()}
                                         href={shortcut.href}
                                         aria-label={shortcut.label}
                                         aria-disabled={

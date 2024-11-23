@@ -7,6 +7,10 @@
         min-height: 5.25rem;
     }
 
+    nav {
+        background-color: $menu-background-color;
+    }
+
     a {
         color: $menu-text-color;
         text-decoration: none;

@@ -56,7 +56,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
                 <Container fluid>
                     <Row className="justify-content-center">
                         <Col lg={6}>
-                            <Navbar expand="lg" className="bg-dark">
+                            <Navbar expand="lg">
                                 <Container
                                     className={styles.navbar_container}
                                     fluid
