@@ -22,12 +22,20 @@
     max-width: 100%;
 }
 
+.title {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 0;
+    padding-bottom: 0.5em;
+}
+
 .image {
     // Same here
     max-width: 100%;
     // Make the image fit image_wrapper
     width: 100%;
     height: auto;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 .toolbar {
@@ -59,15 +67,11 @@ a.toolbar_disabled {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
 
-.title {
-    font-weight: bold;
-    font-size: 1.25em;
-}
-
-.date {
-    font-size: 1em;
+    .date {
+        font-size: 1em;
+        text-align: center;
+    }
 }
 
 .commentary {

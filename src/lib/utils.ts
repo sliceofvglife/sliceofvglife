@@ -11,6 +11,7 @@ const COMICS_PUBLIC_DIR = process.env.NEXT_PUBLIC_COMICS_PUBLIC_DIR ?? "";
 const COMICS_WEBP = process.env.NEXT_PUBLIC_COMICS_WEBP === "1";
 const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL ?? "";
 export const COMICS_IMAGE_URL = process.env.NEXT_PUBLIC_COMICS_IMAGE_URL ?? "";
+const DEFAULT_GAME_CATEGORY = "pokemon-rubis";
 
 interface CategoryConfig {
     id: string;
@@ -21,12 +22,15 @@ interface ComicConfig {
     photo: string;
     title: string;
     version?: string;
+    scale?: number;
     date: string;
     category: string[];
 }
 
 interface ComicsConfig {
+    scale: number;
     categories: CategoryConfig[];
+    games: CategoryConfig[];
     comics: ComicConfig[];
 }
 
@@ -73,10 +77,15 @@ export function collectAbout(): Promise<string> {
     });
 }
 
-export function collectCategories(): Promise<CategoryMetadata[]> {
+function collectCategoriesFrom(
+    what: "categories" | "games"
+): Promise<CategoryMetadata[]> {
     return new Promise<CategoryMetadata[]>(async (resolve) => {
         return resolve(
-            readConfig().categories.map((category) => ({
+            (what === "categories"
+                ? readConfig().categories
+                : readConfig().games
+            ).map((category) => ({
                 id: category.id,
                 title: category.title,
                 src: `${COMICS_IMAGE_URL}/${category.id}.${
@@ -85,6 +94,14 @@ export function collectCategories(): Promise<CategoryMetadata[]> {
             }))
         );
     });
+}
+
+export function collectCategories(): Promise<CategoryMetadata[]> {
+    return collectCategoriesFrom("categories");
+}
+
+export function collectGames(): Promise<CategoryMetadata[]> {
+    return collectCategoriesFrom("games");
 }
 
 export function collectComicSync(
@@ -106,13 +123,19 @@ export function collectComicSync(
     const commentary = fs.existsSync(commentaryFilename)
         ? String(remark.processSync(fs.readFileSync(commentaryFilename)))
         : "";
+    const category = comic.category ?? [];
+    category.push("all");
+    if (!category.some((cat) => cat.startsWith("pokemon-"))) {
+        category.push(DEFAULT_GAME_CATEGORY);
+    }
 
     return {
         id,
         photo: comicPhoto,
         title: comic.title,
-        category: comic.category ?? [],
+        category: category,
         commentary,
+        scale: comic.scale ?? config.scale,
         date: comic.date,
         href: `/comic/${id}`,
         src:

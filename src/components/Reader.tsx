@@ -16,15 +16,13 @@ import { unlockComic } from "./Archive";
 import Image from "next/image";
 import Link from "next/link";
 
-// Scale of comics
-const COMICS_SCALE = 2;
-
 export interface ComicMetadata {
     id: string;
     photo: string;
     title: string;
     category: string[];
     commentary: string;
+    scale: number;
     date: string;
     // href of the page
     href: string;
@@ -109,10 +107,13 @@ class Reader extends React.Component<ReaderProps> {
             >
                 <div className="row">
                     <div className="col d-flex flex-column justify-content-center align-items-center">
-                        <div
+                        <article
                             className={styles.image_wrapper}
-                            style={{ width: `${comic.width * COMICS_SCALE}px` }}
+                            style={{ width: `${comic.width * comic.scale}px` }}
                         >
+                            <header>
+                                <h1 className={styles.title}>{comic.title}</h1>
+                            </header>
                             <Image
                                 className={styles.image}
                                 src={comic.src}
@@ -148,42 +149,41 @@ class Reader extends React.Component<ReaderProps> {
                                     </Link>
                                 ))}
                             </div>
-                            <div className={styles.info}>
-                                <div className={styles.title}>
-                                    {comic.title}
-                                </div>
-                                <div className={styles.date}>
-                                    {new Date(comic.date).toLocaleString()}
-                                </div>
-                                <div
-                                    className={styles.commentary}
-                                    style={{
-                                        display:
-                                            comic.commentary === ""
-                                                ? "none"
-                                                : "block"
-                                    }}
-                                >
+                            <section className={styles.info}>
+                                <section>
+                                    <footer className={styles.date}>
+                                        {new Date(comic.date).toLocaleString()}
+                                    </footer>
                                     <div
-                                        className={
-                                            styles.commentary_icon_wrapper
-                                        }
+                                        className={styles.commentary}
+                                        style={{
+                                            display:
+                                                comic.commentary === ""
+                                                    ? "none"
+                                                    : "block"
+                                        }}
                                     >
-                                        <Suspense fallback={<></>}>
-                                            <FontAwesomeIcon
-                                                className={
-                                                    styles.commentary_icon
-                                                }
-                                                icon={faCommentDots}
-                                            />
-                                        </Suspense>
+                                        <div
+                                            className={
+                                                styles.commentary_icon_wrapper
+                                            }
+                                        >
+                                            <Suspense fallback={<></>}>
+                                                <FontAwesomeIcon
+                                                    className={
+                                                        styles.commentary_icon
+                                                    }
+                                                    icon={faCommentDots}
+                                                />
+                                            </Suspense>
+                                        </div>
+                                        <ReactMarkdown>
+                                            {comic.commentary}
+                                        </ReactMarkdown>
                                     </div>
-                                    <ReactMarkdown>
-                                        {comic.commentary}
-                                    </ReactMarkdown>
-                                </div>
-                            </div>
-                        </div>
+                                </section>
+                            </section>
+                        </article>
                     </div>
                 </div>
             </div>

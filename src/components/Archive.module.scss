@@ -16,13 +16,21 @@
         color: $text-selected-color;
     }
 
-    .icon {
-        transition: transform .2s;
-    }
+    @include media-breakpoint-up(sm) {
+        .icon {
+            transition: transform .2s;
+        }
 
-    .item:hover .icon {
-        transform: scale(1.1);
+        .item:hover .icon {
+            transform: scale(1.025);
+        }
     }
+}
+
+.filters_lists {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
 }
 
 .filters_list {
@@ -30,9 +38,9 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    column-gap: 1em;
     margin: 0;
     padding: 0;
-    margin-bottom: 3em;
 
     .item {
         flex-grow: 1;
@@ -50,7 +58,7 @@
     }
 
     .icon {
-        width: 3em;
+        width: 2.5em;
         aspect-ratio: 1/1;
         background-repeat: no-repeat;
         background-size: contain;
@@ -60,9 +68,20 @@
 
     .title {
         padding-top: 0.25em;
+        text-align: center;
+    }
+
+    // Add a last invisible element to fill up the space
+    @include media-breakpoint-up(sm) {
+
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            flex-grow: 10;
+        }
     }
 }
-
 
 .comics_list {
     list-style: none;
@@ -72,13 +91,17 @@
     row-gap: 2em;
     column-gap: 2em;
     margin: 0;
+    margin-top: 3em;
+    margin-bottom: 3em;
     padding: 0;
 
     // Add a last invisible element to fill up the space
-    &:after {
-        content: '';
-        display: block;
-        flex-grow: 10;
+    @include media-breakpoint-up(sm) {
+        &:after {
+            content: '';
+            display: block;
+            flex-grow: 10;
+        }
     }
 
     .title {
@@ -87,19 +110,26 @@
         // Avoid taking up the space of image and fill parent's width
         position: absolute;
         width: 100%;
-        // Add ellipsis on name when too big
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
         font-family: consolas;
         // Avoid text covered by image when scale up on hover
         padding-top: 0.25em;
+        // Avoid too much space between lines
+        line-height: 1em;
     }
 
-    .item {
-        height: 8em;
-        flex-grow: 1;
-        margin: 0.5em;
+    @include media-breakpoint-up(sm) {
+        .item {
+            height: 8em;
+            flex-grow: 1;
+            margin: 0.5em;
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        .item {
+            min-width: 100%;
+            aspect-ratio: 16/9;
+        }
     }
 
     .title_wrapper {
@@ -141,6 +171,5 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-top: 3em;
     column-gap: 1em;
 }
