@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Menu.module.scss";
 
+const MENU_FIX_URL = process.env.NEXT_PUBLIC_MENU_FIX_URL ?? "/";
+
 const mapStateToProps = (state: any) => ({
     menu: getMenu(state)
 });
@@ -54,7 +56,9 @@ class Menu extends React.Component<MenuProps, MenuState> {
                 <div className="external_container">
                     <Navbar expand="lg" variant="dark">
                         <Container className={styles.navbar_container}>
-                            <Navbar.Brand href="/">SliceOfVGLife</Navbar.Brand>
+                            <Navbar.Brand href={MENU_FIX_URL}>
+                                SliceOfVGLife
+                            </Navbar.Brand>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Navbar.Collapse
                                 className={styles.navbar_collapse}
@@ -66,34 +70,34 @@ class Menu extends React.Component<MenuProps, MenuState> {
                                         "me-auto"
                                     ].join(" ")}
                                 >
-                                    <Nav.Link key="home" href="/">
+                                    <Nav.Link key="home" href={MENU_FIX_URL}>
                                         <FontAwesomeIcon icon={faHome} />
                                     </Nav.Link>
                                     {[
                                         {
-                                            href: "/archive",
+                                            href: "archive",
                                             label: "Voir les archives",
                                             text: "Archive"
                                         },
                                         {
-                                            href: "/random",
+                                            href: "random",
                                             label: "Voir un comic aléatoire",
                                             text: "Au hasard"
                                         },
                                         {
-                                            href: "/about",
+                                            href: "about",
                                             label: "Voir la description du site",
                                             text: "À propos"
                                         },
                                         {
-                                            href: "/feed",
+                                            href: "feed",
                                             label: "Voir le flux RSS",
                                             text: "RSS"
                                         }
                                     ].map((item) => (
                                         <Nav.Link
                                             key={item.href.substring(1)}
-                                            href={item.href}
+                                            href={`${MENU_FIX_URL}${item.href}`}
                                         >
                                             {item.text}
                                         </Nav.Link>
