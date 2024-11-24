@@ -16,6 +16,8 @@ const ARCHIVE_COMICS_COUNT =
 const ARCHIVE_COMMENT_ICONS =
     process.env.NEXT_PUBLIC_ARCHIVE_COMMENT_ICONS === "1";
 const PAGE_SIZE = 15;
+export const XS_COL = 12;
+export const LG_COL = 8;
 
 export function getUnlockedComics(): { [key: string]: boolean } {
     const value = getCookie("unlockedComics");
@@ -262,9 +264,15 @@ class Archive extends React.Component<ArchiveProps> {
                 : {};
 
         return (
-            <Container className={[className || "", styles.archive].join(" ")}>
-                <Row>
-                    <Col className={styles.filters_lists}>
+            <Container
+                className={[
+                    className || "",
+                    styles.archive,
+                    "external_container"
+                ].join(" ")}
+            >
+                <Row className="justify-content-center">
+                    <Col className={styles.filters_col} xs={XS_COL} lg={LG_COL}>
                         {this.renderCategories(
                             currentCategory,
                             this.props.categories
@@ -275,11 +283,13 @@ class Archive extends React.Component<ArchiveProps> {
                         )}
                     </Col>
                 </Row>
-                <Row>
-                    <Col>{this.renderComics(comics)}</Col>
+                <Row className="justify-content-center">
+                    <Col xs={XS_COL} lg={LG_COL}>
+                        {this.renderComics(comics)}
+                    </Col>
                 </Row>
                 <Row className="justify-content-center">
-                    <Col xs={{ span: "auto" }}>
+                    <Col className={styles.pages_col} xs={XS_COL} lg={LG_COL}>
                         {this.renderPages(numPages, currentPage, pageQuery)}
                     </Col>
                 </Row>

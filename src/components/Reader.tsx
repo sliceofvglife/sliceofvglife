@@ -15,7 +15,7 @@ import {
     IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import ReactMarkdown from "react-markdown";
-import { unlockComic } from "./Archive";
+import { LG_COL, unlockComic, XS_COL } from "./Archive";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -103,9 +103,19 @@ class Reader extends React.Component<ReaderProps> {
         unlockComic(comic.id);
 
         return (
-            <Container className={[className || "", styles.reader].join(" ")}>
-                <Row>
-                    <Col className="d-flex flex-column justify-content-center align-items-center">
+            <Container
+                className={[
+                    className || "",
+                    styles.reader,
+                    "external_container"
+                ].join(" ")}
+            >
+                <Row className="justify-content-center">
+                    <Col
+                        className="d-flex flex-column justify-content-center align-items-center"
+                        xs={XS_COL}
+                        lg={LG_COL}
+                    >
                         <article
                             className={styles.image_wrapper}
                             style={{ width: `${comic.width * comic.scale}px` }}
@@ -152,16 +162,16 @@ class Reader extends React.Component<ReaderProps> {
                             <section className={styles.info}>
                                 <section>
                                     <footer className={styles.date}>
+                                        <div>Pokemon Anarchy</div>
                                         {new Date(comic.date).toLocaleString()}
                                     </footer>
                                     <div
-                                        className={styles.commentary}
-                                        style={{
-                                            display:
-                                                comic.commentary === ""
-                                                    ? "none"
-                                                    : "block"
-                                        }}
+                                        className={[
+                                            styles.commentary,
+                                            comic.commentary === ""
+                                                ? styles.no_commentary
+                                                : ""
+                                        ].join(" ")}
                                     >
                                         <div
                                             className={
@@ -178,7 +188,9 @@ class Reader extends React.Component<ReaderProps> {
                                             </Suspense>
                                         </div>
                                         <ReactMarkdown>
-                                            {comic.commentary}
+                                            {comic.commentary !== ""
+                                                ? comic.commentary
+                                                : "Aucun commentaire disponible"}
                                         </ReactMarkdown>
                                     </div>
                                 </section>

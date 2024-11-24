@@ -40,6 +40,10 @@ body {
     display: flex;
     flex-direction: column;
     row-gap: 3em;
+
+    .external_container {
+        width: 90%;
+    }
 }
 
 .App-link {

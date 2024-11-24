@@ -53,66 +53,58 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
         return (
             <nav className={[styles.menu, className || ""].join(" ")}>
-                <Container fluid>
-                    <Row className="justify-content-center">
-                        <Col lg={6}>
-                            <Navbar expand="lg">
-                                <Container
-                                    className={styles.navbar_container}
-                                    fluid
+                <div className="external_container">
+                    <Navbar expand="lg" variant="dark">
+                        <Container className={styles.navbar_container}>
+                            <Navbar.Brand href="/">SliceOfVGLife</Navbar.Brand>
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Navbar.Collapse
+                                className={styles.navbar_collapse}
+                                id="basic-navbar-nav"
+                            >
+                                <Nav
+                                    className={[
+                                        styles.navbar_list,
+                                        "me-auto"
+                                    ].join(" ")}
                                 >
-                                    <Navbar.Brand href="/">
-                                        SliceOfVGLife
-                                    </Navbar.Brand>
-                                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                                    <Navbar.Collapse id="basic-navbar-nav">
-                                        <Nav
-                                            className={[
-                                                styles.navbar_list,
-                                                "me-auto"
-                                            ].join(" ")}
+                                    <Nav.Link key="home" href="/">
+                                        <FontAwesomeIcon icon={faHome} />
+                                    </Nav.Link>
+                                    {[
+                                        {
+                                            href: "/archive",
+                                            label: "Voir les archives",
+                                            text: "Archive"
+                                        },
+                                        {
+                                            href: "/random",
+                                            label: "Voir un comic aléatoire",
+                                            text: "Au hasard"
+                                        },
+                                        {
+                                            href: "/about",
+                                            label: "Voir la description du site",
+                                            text: "À propos"
+                                        },
+                                        {
+                                            href: "/feed",
+                                            label: "Voir le flux RSS",
+                                            text: "RSS"
+                                        }
+                                    ].map((item) => (
+                                        <Nav.Link
+                                            key={item.href.substring(1)}
+                                            href={item.href}
                                         >
-                                            <Nav.Link key="home" href="/">
-                                                <FontAwesomeIcon
-                                                    icon={faHome}
-                                                />
-                                            </Nav.Link>
-                                            {[
-                                                {
-                                                    href: "/archive",
-                                                    label: "Voir les archives",
-                                                    text: "Archive"
-                                                },
-                                                {
-                                                    href: "/random",
-                                                    label: "Voir un comic aléatoire",
-                                                    text: "Au hasard"
-                                                },
-                                                {
-                                                    href: "/about",
-                                                    label: "Voir la description du site",
-                                                    text: "À propos"
-                                                },
-                                                {
-                                                    href: "/feed",
-                                                    label: "Voir le flux RSS",
-                                                    text: "RSS"
-                                                }
-                                            ].map((item) => (
-                                                <Nav.Link
-                                                    key={item.href.substring(1)}
-                                                    href={item.href}
-                                                >
-                                                    {item.text}
-                                                </Nav.Link>
-                                            ))}
-                                        </Nav>
-                                    </Navbar.Collapse>
-                                </Container>
-                            </Navbar>
-                        </Col>
-                    </Row>
-                </Container>
+                                            {item.text}
+                                        </Nav.Link>
+                                    ))}
+                                </Nav>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                </div>
             </nav>
         );
     }

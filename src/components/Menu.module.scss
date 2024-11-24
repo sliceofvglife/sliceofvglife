@@ -2,10 +2,9 @@
 
 .menu {
     background-color: $menu-background-color;
-
-    @include media-breakpoint-down(md) {
-        min-height: 5.25rem;
-    }
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
     nav {
         background-color: $menu-background-color;
@@ -19,6 +18,16 @@
 
         &:hover {
             color: $menu-hover-color;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        .navbar_container {
+            width: auto;
+        }
+
+        .navbar_collapse {
+            flex-grow: 0;
         }
     }
 }

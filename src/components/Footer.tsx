@@ -34,7 +34,7 @@ class Footer extends React.Component<FooterProps, FooterState> {
                     className
                 ].join(" ")}
             >
-                <Container fluid>
+                <Container className="external_container" fluid>
                     <Row
                         className={[
                             styles.footer_row,
