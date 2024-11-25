@@ -141,6 +141,7 @@ export function collectComicSync(
         scale: comic.scale ?? config.scale,
         date: comic.date,
         href: `/comic/${id}`,
+        url: `${WEBSITE_URL}/comic/${id}`,
         src:
             `${COMICS_IMAGE_URL}/${comicPhoto}` +
             (comic.version !== undefined ? `?v=${comic.version}` : ""),
@@ -204,7 +205,7 @@ export async function generateRssFeed(comics: ComicMetadata[]) {
         feed.item({
             title: comic.title,
             description: "Découvrez un nouvel épisode de Pokemon Anarchy",
-            url: comic.href,
+            url: comic.url,
             date: new Date(comic.date)
         });
     });

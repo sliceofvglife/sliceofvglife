@@ -29,6 +29,8 @@ export interface ComicMetadata {
     date: string;
     // href of the page
     href: string;
+    // URL of the site
+    url: string;
     // src of the image
     src: string;
     // Size of the image
