@@ -4,8 +4,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import type { InferGetStaticPropsType } from "next";
 import { collectComicsSync, findComicById } from "@/lib/utils";
-import Head from "next/head";
-import { META_DESCRIPTION, META_TITLE } from "@/lib/const";
 import { getComicsHeadMetadata } from "@/pages";
 
 export async function getStaticProps(context: any) {
