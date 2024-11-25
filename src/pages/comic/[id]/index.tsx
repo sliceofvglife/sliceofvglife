@@ -4,6 +4,8 @@ import React from "react";
 import dynamic from "next/dynamic";
 import type { InferGetStaticPropsType } from "next";
 import { collectComicsSync, findComicById } from "@/lib/utils";
+import Head from "next/head";
+import { META_DESCRIPTION, META_TITLE } from "@/lib/const";
 
 export async function getStaticProps(context: any) {
     const id = context.params.id;
@@ -55,6 +57,23 @@ export default function GamePage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
     return (
         <>
+            <Head>
+                <title>
+                    {[comic.title, "Pokemon Anarchy", META_TITLE].join(" | ")}
+                </title>
+                <meta name="og:title" content={comic.title}></meta>
+                <meta name="og:description" content={META_DESCRIPTION}></meta>
+                <meta name="og:url" content={comic.href}></meta>
+                <meta name="og:image" content={comic.src}></meta>
+                <meta name="og:type" content="article"></meta>
+                <meta name="twitter:title" content={comic.title}></meta>
+                <meta
+                    name="twitter:description"
+                    content={META_DESCRIPTION}
+                ></meta>
+                <meta name="twitter:image" content={comic.src}></meta>
+                <meta name="twitter:card" content="summary_large_image"></meta>
+            </Head>
             <link rel="preload" as="image" href={comic.href} />
             <Reader
                 comic={comic}

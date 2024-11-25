@@ -6,12 +6,15 @@ import { remark } from "remark";
 import imageSize from "image-size";
 import type { ComicMetadata } from "@/components/Reader";
 import { CategoryMetadata } from "@/components/Archive";
-
-const COMICS_PUBLIC_DIR = process.env.NEXT_PUBLIC_COMICS_PUBLIC_DIR ?? "";
-const COMICS_WEBP = process.env.NEXT_PUBLIC_COMICS_WEBP === "1";
-const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL ?? "";
-export const COMICS_IMAGE_URL = process.env.NEXT_PUBLIC_COMICS_IMAGE_URL ?? "";
-const DEFAULT_GAME_CATEGORY = "pokemon-rubis";
+import {
+    COMICS_IMAGE_URL,
+    COMICS_PUBLIC_DIR,
+    COMICS_WEBP,
+    DEFAULT_GAME_CATEGORY,
+    RSS_DESCRIPTION,
+    RSS_TITLE,
+    WEBSITE_URL
+} from "./const";
 
 interface CategoryConfig {
     id: string;
@@ -185,8 +188,8 @@ export function findComicById(
 
 export async function generateRssFeed(comics: ComicMetadata[]) {
     const feedOptions = {
-        title: "SliceOfVGLife Comics",
-        description: "Derniers comics de SliceOfVGLife",
+        title: RSS_TITLE,
+        description: RSS_DESCRIPTION,
         language: "fr-fr",
         site_url: WEBSITE_URL,
         feed_url: `${WEBSITE_URL}/feed.xml`,
@@ -200,7 +203,7 @@ export async function generateRssFeed(comics: ComicMetadata[]) {
     comics.map((comic) => {
         feed.item({
             title: comic.title,
-            description: "Nouveau comics de SliceOfVGLife",
+            description: "Découvrez un nouvel épisode de Pokemon Anarchy",
             url: comic.href,
             date: new Date(comic.date)
         });

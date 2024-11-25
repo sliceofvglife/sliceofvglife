@@ -10,6 +10,7 @@ import { Actions } from "../redux/actions/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Menu.module.scss";
+import { WEBSITE_TITLE } from "@/lib/const";
 
 const MENU_FIX_URL = process.env.NEXT_PUBLIC_MENU_FIX_URL ?? "/";
 
@@ -57,7 +58,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
                     <Navbar expand="lg" variant="dark">
                         <Container className={styles.navbar_container}>
                             <Navbar.Brand href={MENU_FIX_URL}>
-                                SliceOfVGLife
+                                {WEBSITE_TITLE}
                             </Navbar.Brand>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Navbar.Collapse
