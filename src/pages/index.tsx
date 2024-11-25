@@ -11,6 +11,53 @@ import {
     META_TITLE,
     WEBSITE_URL
 } from "@/lib/const";
+import type { ComicMetadata } from "@/components/Reader";
+
+// Get head metadata for comics pages.
+export function getComicsHeadMetadata(comic: ComicMetadata) {
+    return (
+        <Head>
+            <title>
+                {[comic.title, "Pokemon Anarchy", META_TITLE].join(" | ")}
+            </title>
+            <meta name="og:title" content={comic.title}></meta>
+            <meta name="og:description" content={META_DESCRIPTION}></meta>
+            <meta name="og:url" content={comic.href}></meta>
+            <meta name="og:image" content={comic.src}></meta>
+            <meta name="og:type" content="article"></meta>
+            <meta name="twitter:title" content={comic.title}></meta>
+            <meta name="twitter:description" content={META_DESCRIPTION}></meta>
+            <meta name="twitter:image" content={comic.src}></meta>
+            <meta name="twitter:card" content="summary_large_image"></meta>
+        </Head>
+    );
+}
+
+// Get generic head metadata for the non comics pages.
+export function getGenericTitleHeadMetadata(title: string) {
+    return (
+        <Head>
+            <title>{title}</title>
+            <meta name="og:title" content={META_TITLE}></meta>
+            <meta name="og:description" content={META_DESCRIPTION}></meta>
+            <meta name="og:url" content={WEBSITE_URL}></meta>
+            <meta name="og:image" content={WEBSITE_URL}></meta>
+            <meta name="og:type" content="article"></meta>
+            <meta name="twitter:title" content={META_TITLE}></meta>
+            <meta name="twitter:description" content={META_DESCRIPTION}></meta>
+            <meta name="twitter:image" content={WEBSITE_URL}></meta>
+            <meta name="twitter:card" content="summary_large_image"></meta>
+        </Head>
+    );
+}
+
+export function getPageHeadMetadata(title: string) {
+    return getGenericTitleHeadMetadata([title, META_TITLE].join(" | "));
+}
+
+function getHomeHeadMetadata() {
+    return getGenericTitleHeadMetadata(HEAD_TITLE);
+}
 
 export async function getStaticProps() {
     const comics = collectComicsSync();
@@ -34,21 +81,7 @@ export default function HomePage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
     return (
         <>
-            <Head>
-                <title>{HEAD_TITLE}</title>
-                <meta name="og:title" content={META_TITLE}></meta>
-                <meta name="og:description" content={META_DESCRIPTION}></meta>
-                <meta name="og:url" content={WEBSITE_URL}></meta>
-                <meta name="og:image" content={WEBSITE_URL}></meta>
-                <meta name="og:type" content="article"></meta>
-                <meta name="twitter:title" content={META_TITLE}></meta>
-                <meta
-                    name="twitter:description"
-                    content={META_DESCRIPTION}
-                ></meta>
-                <meta name="twitter:image" content={WEBSITE_URL}></meta>
-                <meta name="twitter:card" content="summary_large_image"></meta>
-            </Head>
+            {getHomeHeadMetadata()}
             <Home
                 comic={comic}
                 first={first}

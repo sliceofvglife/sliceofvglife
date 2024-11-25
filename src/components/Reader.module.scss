@@ -13,6 +13,7 @@
     }
 }
 
+.reader_wrapper,
 .image_wrapper {
     display: flex;
     flex-direction: column;
@@ -20,6 +21,12 @@
     // The width of that element is the image's width but this prevents
     // the element to stay too big when the viewport gets small
     max-width: 100%;
+}
+
+@include media-breakpoint-down(md) {
+    .reader_wrapper {
+        width: 100% !important;
+    }
 }
 
 .title {
@@ -68,6 +75,10 @@ a.toolbar_disabled {
     flex-direction: column;
     align-items: center;
 
+    @include media-breakpoint-down(md) {
+        width: 100%;
+    }
+
     .date {
         font-size: 1rem;
         text-align: center;
@@ -78,6 +89,11 @@ a.toolbar_disabled {
     margin-top: 2rem;
     background-color: #efeeee;
     border-radius: 1rem;
+
+    @include media-breakpoint-down(md) {
+        width: 100%;
+    }
+
     padding: 2rem;
     padding-top: 1rem;
     padding-bottom: 1rem;

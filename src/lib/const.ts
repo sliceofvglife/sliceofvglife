@@ -8,5 +8,5 @@ export const COMICS_WEBP = process.env.NEXT_PUBLIC_COMICS_WEBP === "1";
 export const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL ?? "";
 export const COMICS_IMAGE_URL = process.env.NEXT_PUBLIC_COMICS_IMAGE_URL ?? "";
 export const DEFAULT_GAME_CATEGORY = "pokemon-rubis";
-export const RSS_TITLE = `Les comics de ${META_TITLE}`;
-export const RSS_DESCRIPTION = `Nouveaux comics de ${META_TITLE}`;
+export const RSS_TITLE = `Les comics de ${WEBSITE_TITLE}`;
+export const RSS_DESCRIPTION = `Nouveaux comics de ${WEBSITE_TITLE}`;

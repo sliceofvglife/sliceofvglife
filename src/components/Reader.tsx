@@ -117,24 +117,31 @@ class Reader extends React.Component<ReaderProps> {
                         lg={LG_COL}
                     >
                         <article
-                            className={styles.image_wrapper}
+                            className={styles.reader_wrapper}
                             style={{ width: `${comic.width * comic.scale}px` }}
                         >
                             <header>
                                 <h1 className={styles.title}>{comic.title}</h1>
                             </header>
-                            <Image
-                                className={styles.image}
-                                src={comic.src}
-                                alt={`image de ${comic.title.toLowerCase()}`}
-                                width={`${comic.width}`}
-                                height={`${comic.height}`}
+                            <div
+                                className={styles.image_wrapper}
                                 style={{
-                                    aspectRatio: `${comic.width}/${comic.height}`
+                                    width: `${comic.width * comic.scale}px`
                                 }}
-                                priority={true}
-                                unoptimized
-                            />
+                            >
+                                <Image
+                                    className={styles.image}
+                                    src={comic.src}
+                                    alt={`image de ${comic.title.toLowerCase()}`}
+                                    width={`${comic.width}`}
+                                    height={`${comic.height}`}
+                                    style={{
+                                        aspectRatio: `${comic.width}/${comic.height}`
+                                    }}
+                                    priority={true}
+                                    unoptimized
+                                />
+                            </div>
                             <div className={styles.toolbar}>
                                 {shortcuts.map((shortcut, i) => (
                                     <Link
@@ -160,40 +167,38 @@ class Reader extends React.Component<ReaderProps> {
                                 ))}
                             </div>
                             <section className={styles.info}>
-                                <section>
-                                    <footer className={styles.date}>
-                                        <div>Pokemon Anarchy</div>
-                                        {new Date(comic.date).toLocaleString()}
-                                    </footer>
+                                <footer className={styles.date}>
+                                    <div>Pokemon Anarchy</div>
+                                    {new Date(comic.date).toLocaleString()}
+                                </footer>
+                                <div
+                                    className={[
+                                        styles.commentary,
+                                        comic.commentary === ""
+                                            ? styles.no_commentary
+                                            : ""
+                                    ].join(" ")}
+                                >
                                     <div
-                                        className={[
-                                            styles.commentary,
-                                            comic.commentary === ""
-                                                ? styles.no_commentary
-                                                : ""
-                                        ].join(" ")}
+                                        className={
+                                            styles.commentary_icon_wrapper
+                                        }
                                     >
-                                        <div
-                                            className={
-                                                styles.commentary_icon_wrapper
-                                            }
-                                        >
-                                            <Suspense fallback={<></>}>
-                                                <FontAwesomeIcon
-                                                    className={
-                                                        styles.commentary_icon
-                                                    }
-                                                    icon={faCommentDots}
-                                                />
-                                            </Suspense>
-                                        </div>
-                                        <ReactMarkdown>
-                                            {comic.commentary !== ""
-                                                ? comic.commentary
-                                                : "Aucun commentaire disponible"}
-                                        </ReactMarkdown>
+                                        <Suspense fallback={<></>}>
+                                            <FontAwesomeIcon
+                                                className={
+                                                    styles.commentary_icon
+                                                }
+                                                icon={faCommentDots}
+                                            />
+                                        </Suspense>
                                     </div>
-                                </section>
+                                    <ReactMarkdown>
+                                        {comic.commentary !== ""
+                                            ? comic.commentary
+                                            : "Aucun commentaire disponible"}
+                                    </ReactMarkdown>
+                                </div>
                             </section>
                         </article>
                     </Col>
