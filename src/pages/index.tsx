@@ -20,18 +20,18 @@ export function getComicsHeadMetadata(comic: ComicMetadata) {
             <title>
                 {[comic.title, "Pokemon Anarchy", META_TITLE].join(" | ")}
             </title>
-            <meta property="og:title" content={comic.title}></meta>
-            <meta property="og:description" content={META_DESCRIPTION}></meta>
-            <meta property="og:url" content={comic.href}></meta>
-            <meta property="og:image" content={comic.src}></meta>
-            <meta property="og:type" content="article"></meta>
-            <meta property="twitter:title" content={comic.title}></meta>
-            <meta
-                property="twitter:description"
-                content={META_DESCRIPTION}
-            ></meta>
-            <meta property="twitter:image" content={comic.src}></meta>
-            <meta property="twitter:card" content="summary_large_image"></meta>
+            <meta name="description" content={META_DESCRIPTION} />
+            <meta property="og:title" content={comic.title} />
+            <meta property="og:description" content={META_DESCRIPTION} />
+            <meta property="og:url" content={comic.url} />
+            <meta property="og:image" content={comic.src} />
+            <meta property="og:type" content="article" />
+            <meta property="twitter:url" content={comic.url} />
+            <meta property="twitter:domain" content="sliceofvglife.github.io" />
+            <meta name="twitter:title" content={comic.title} />
+            <meta name="twitter:description" content={META_DESCRIPTION} />
+            <meta name="twitter:image" content={comic.src} />
+            <meta name="twitter:card" content="summary_large_image" />
         </Head>
     );
 }
@@ -41,18 +41,18 @@ export function getGenericTitleHeadMetadata(title: string) {
     return (
         <Head>
             <title>{title}</title>
-            <meta property="og:title" content={META_TITLE}></meta>
-            <meta property="og:description" content={META_DESCRIPTION}></meta>
-            <meta property="og:url" content={WEBSITE_URL}></meta>
-            <meta property="og:image" content={WEBSITE_URL}></meta>
-            <meta property="og:type" content="article"></meta>
-            <meta property="twitter:title" content={META_TITLE}></meta>
-            <meta
-                property="twitter:description"
-                content={META_DESCRIPTION}
-            ></meta>
-            <meta property="twitter:image" content={WEBSITE_URL}></meta>
-            <meta property="twitter:card" content="summary_large_image"></meta>
+            <meta name="description" content={META_DESCRIPTION} />
+            <meta property="og:title" content={META_TITLE} />
+            <meta property="og:description" content={META_DESCRIPTION} />
+            <meta property="og:url" content={WEBSITE_URL} />
+            <meta property="og:image" content={WEBSITE_URL} />
+            <meta property="og:type" content="article" />
+            <meta property="twitter:url" content={WEBSITE_URL} />
+            <meta property="twitter:domain" content="sliceofvglife.github.io" />
+            <meta name="twitter:title" content={META_TITLE} />
+            <meta name="twitter:description" content={META_DESCRIPTION} />
+            <meta name="twitter:image" content={WEBSITE_URL} />
+            <meta name="twitter:card" content="summary_large_image" />
         </Head>
     );
 }
