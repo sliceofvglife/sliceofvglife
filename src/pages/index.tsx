@@ -20,15 +20,18 @@ export function getComicsHeadMetadata(comic: ComicMetadata) {
             <title>
                 {[comic.title, "Pokemon Anarchy", META_TITLE].join(" | ")}
             </title>
-            <meta name="og:title" content={comic.title}></meta>
-            <meta name="og:description" content={META_DESCRIPTION}></meta>
-            <meta name="og:url" content={comic.href}></meta>
-            <meta name="og:image" content={comic.src}></meta>
-            <meta name="og:type" content="article"></meta>
-            <meta name="twitter:title" content={comic.title}></meta>
-            <meta name="twitter:description" content={META_DESCRIPTION}></meta>
-            <meta name="twitter:image" content={comic.src}></meta>
-            <meta name="twitter:card" content="summary_large_image"></meta>
+            <meta property="og:title" content={comic.title}></meta>
+            <meta property="og:description" content={META_DESCRIPTION}></meta>
+            <meta property="og:url" content={comic.href}></meta>
+            <meta property="og:image" content={comic.src}></meta>
+            <meta property="og:type" content="article"></meta>
+            <meta property="twitter:title" content={comic.title}></meta>
+            <meta
+                property="twitter:description"
+                content={META_DESCRIPTION}
+            ></meta>
+            <meta property="twitter:image" content={comic.src}></meta>
+            <meta property="twitter:card" content="summary_large_image"></meta>
         </Head>
     );
 }
@@ -38,15 +41,18 @@ export function getGenericTitleHeadMetadata(title: string) {
     return (
         <Head>
             <title>{title}</title>
-            <meta name="og:title" content={META_TITLE}></meta>
-            <meta name="og:description" content={META_DESCRIPTION}></meta>
-            <meta name="og:url" content={WEBSITE_URL}></meta>
-            <meta name="og:image" content={WEBSITE_URL}></meta>
-            <meta name="og:type" content="article"></meta>
-            <meta name="twitter:title" content={META_TITLE}></meta>
-            <meta name="twitter:description" content={META_DESCRIPTION}></meta>
-            <meta name="twitter:image" content={WEBSITE_URL}></meta>
-            <meta name="twitter:card" content="summary_large_image"></meta>
+            <meta property="og:title" content={META_TITLE}></meta>
+            <meta property="og:description" content={META_DESCRIPTION}></meta>
+            <meta property="og:url" content={WEBSITE_URL}></meta>
+            <meta property="og:image" content={WEBSITE_URL}></meta>
+            <meta property="og:type" content="article"></meta>
+            <meta property="twitter:title" content={META_TITLE}></meta>
+            <meta
+                property="twitter:description"
+                content={META_DESCRIPTION}
+            ></meta>
+            <meta property="twitter:image" content={WEBSITE_URL}></meta>
+            <meta property="twitter:card" content="summary_large_image"></meta>
         </Head>
     );
 }
