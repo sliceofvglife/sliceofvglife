@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title><![CDATA[Les comics de Le site de SliceOfVGLife]]></title>
-        <description><![CDATA[Nouveaux comics de Le site de SliceOfVGLife]]></description>
+        <title><![CDATA[Les comics de SliceOfVGLife]]></title>
+        <description><![CDATA[Nouveaux comics de SliceOfVGLife]]></description>
         <link>https://sliceofvglife.github.io/sliceofvglife</link>
         <image>
             <url>https://sliceofvglife.github.io/sliceofvglife/logo.jpeg</url>
-            <title>Les comics de Le site de SliceOfVGLife</title>
+            <title>Les comics de SliceOfVGLife</title>
             <link>https://sliceofvglife.github.io/sliceofvglife</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Mon, 25 Nov 2024 11:51:07 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 25 Nov 2024 14:42:53 GMT</lastBuildDate>
         <atom:link href="https://sliceofvglife.github.io/sliceofvglife/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Mon, 25 Nov 2024 11:51:07 GMT</pubDate>
+        <pubDate>Mon, 25 Nov 2024 14:42:53 GMT</pubDate>
         <copyright><![CDATA[Tous droits réservés 2024]]></copyright>
         <language><![CDATA[fr-fr]]></language>
         <item>
