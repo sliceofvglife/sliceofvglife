@@ -4,7 +4,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import type { InferGetStaticPropsType } from "next";
 import { collectAbout } from "@/lib/utils";
-import { getPageHeadMetadata } from "..";
 
 export async function getStaticProps() {
     return {
@@ -21,10 +20,5 @@ const About = dynamic(() => import("@/components/About"), {
 export default function RandomPage({
     text
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-    return (
-        <>
-            {getPageHeadMetadata("À propos")}
-            <About text={text} />
-        </>
-    );
+    return <About text={text} />;
 }

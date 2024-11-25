@@ -8,7 +8,6 @@ import {
     collectComicsSync
 } from "@/lib/utils";
 import type { InferGetStaticPropsType } from "next";
-import { getPageHeadMetadata } from "..";
 
 export async function getStaticProps() {
     return {
@@ -29,10 +28,5 @@ export default function ArchivePage({
     games,
     comics
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-    return (
-        <>
-            {getPageHeadMetadata("Archive")}
-            <Archive categories={categories} games={games} comics={comics} />
-        </>
-    );
+    return <Archive categories={categories} games={games} comics={comics} />;
 }

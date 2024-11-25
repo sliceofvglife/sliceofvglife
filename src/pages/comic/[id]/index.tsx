@@ -4,7 +4,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import type { InferGetStaticPropsType } from "next";
 import { collectComicsSync, findComicById } from "@/lib/utils";
-import { getComicsHeadMetadata } from "@/pages";
 
 export async function getStaticProps(context: any) {
     const id = context.params.id;
@@ -56,7 +55,6 @@ export default function GamePage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
     return (
         <>
-            {getComicsHeadMetadata(comic)}
             <link rel="preload" as="image" href={comic.href} />
             <Reader
                 comic={comic}

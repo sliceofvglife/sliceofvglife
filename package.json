@@ -67,12 +67,14 @@
         "next-purgecss": "^4.0.0",
         "next-sitemap": "^4.2.3",
         "sass": "^1.69.0",
-        "typescript": "^5.0.2"
+        "typescript": "^5.0.2",
+        "tsx": "^4.19.2"
     },
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "postbuild": "npm run sitemap",
+        "postbuild": "npm run metadata && npm run sitemap",
+        "metadata": "npx tsx src/fix_metadata.ts",
         "sitemap": "next-sitemap",
         "serve": "npx serve@latest out",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
