@@ -1,0 +1,181 @@
+@import "./Common";
+
+.archive {
+    flex-grow: 1;
+    font-family: consolas;
+
+    a {
+        color: $text-black-color;
+        text-decoration: none;
+
+        &:hover {
+            color: $text-hover-color;
+        }
+    }
+
+    .selected a {
+        color: $text-selected-color;
+    }
+
+    @include media-breakpoint-up(sm) {
+        .icon {
+            transition: transform .2s;
+        }
+
+        .item:hover .icon {
+            transform: scale(1.025);
+        }
+    }
+}
+
+.filters_col {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.filters_list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    margin: 0;
+    padding: 0;
+
+    .item {
+        flex-grow: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        a {
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 0;
+        }
+    }
+
+    .icon {
+        width: 2.5rem;
+        aspect-ratio: 1/1;
+        background-repeat: no-repeat;
+        background-size: contain;
+        image-rendering: pixelated;
+        background-position: bottom;
+    }
+
+    .title {
+        padding-top: 0.25rem;
+        text-align: center;
+    }
+
+    // Add a last invisible element to fill up the space
+}
+
+.comics_list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 2rem;
+
+    @include media-breakpoint-down(sm) {
+        row-gap: 3rem;
+    }
+
+    column-gap: 2rem;
+    margin: 0;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    padding: 0;
+
+    // Add a last invisible element to fill up the space
+    @include media-breakpoint-up(sm) {
+        &:after {
+            content: '';
+            display: block;
+            flex-grow: 10;
+        }
+    }
+
+    .title {
+        text-decoration: none;
+        text-align: center;
+        // Avoid taking up the space of image and fill parent's width
+        position: absolute;
+        width: 100%;
+        font-family: consolas;
+        // Avoid text covered by image when scale up on hover
+        padding-top: 0.25rem;
+        // Avoid too much space between lines
+        line-height: 1rem;
+    }
+
+    @include media-breakpoint-up(sm) {
+        .item {
+            height: 8rem;
+            flex-grow: 1;
+            margin: 0.5rem;
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        .item {
+            min-width: 100%;
+            aspect-ratio: 16/9;
+        }
+    }
+
+    .title_wrapper {
+        // Avoid taking up the space of image and preserve parent's width
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    .icon {
+        display: block;
+        min-height: 100%;
+        height: 100%;
+        max-height: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .icon.locked {
+        background-color: $text-black-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lock_icon {
+        color: $menu-text-color;
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.pages_col {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.pages_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    column-gap: 1rem;
+}
