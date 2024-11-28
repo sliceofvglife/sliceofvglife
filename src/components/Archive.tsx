@@ -23,13 +23,25 @@ function getComicKey(comic: ComicMetadata): string {
 }
 
 export function getUnlockedComics(comics: ComicMetadata[]): boolean[] {
-    return comics.map(
-        (comic) => localStorage.getItem(getComicKey(comic)) === "1"
-    );
+    return comics.map((comic) => {
+        const comicKey = getComicKey(comic);
+
+        try {
+            return localStorage.getItem(comicKey) === "1";
+        } catch (err) {
+            console.error(err);
+            // Don't lock the comics if there is an issue with localStorage
+            return true;
+        }
+    });
 }
 
 export function unlockComic(comic: ComicMetadata) {
-    localStorage.setItem(getComicKey(comic), "1");
+    try {
+        localStorage.setItem(getComicKey(comic), "1");
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 export interface CategoryMetadata {

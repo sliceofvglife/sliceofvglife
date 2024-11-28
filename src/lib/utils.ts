@@ -20,6 +20,7 @@ import {
 interface CategoryConfig {
     id: string;
     title: string;
+    photo?: string;
 }
 
 interface ComicConfig {
@@ -92,13 +93,18 @@ function collectCategoriesFrom(
             (what === "categories"
                 ? readConfig().categories
                 : readConfig().games
-            ).map((category) => ({
-                id: category.id,
-                title: category.title,
-                src: `${COMICS_IMAGE_URL}/${category.id}.${
-                    COMICS_WEBP ? "webp" : "png"
-                }`
-            }))
+            ).map((category) => {
+                const photo = category.photo ?? `${category.id}.png`;
+                const basename = photo.substring(0, photo.indexOf("."));
+
+                return {
+                    id: category.id,
+                    title: category.title,
+                    src: `${COMICS_IMAGE_URL}/${
+                        COMICS_WEBP ? `${basename}.webp` : photo
+                    }`
+                };
+            })
         );
     });
 }

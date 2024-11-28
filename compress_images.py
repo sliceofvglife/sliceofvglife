@@ -7,6 +7,10 @@ COMICS_DIR = Path(__file__).parent / "public" / "cdn" / "comics"
 IMAGE_FORMAT = (".png", ".jpg", ".jpeg", ".bmp", ".gif")
 CWEBP_PATH = Path("C:/Program Files/libwebp/bin")
 
+webp = (f for f in listdir(COMICS_DIR) if f.lower().endswith(".webp"))
+for f in webp:
+    (COMICS_DIR / f).unlink()
+
 files = (
     f
     for f in listdir(COMICS_DIR)
