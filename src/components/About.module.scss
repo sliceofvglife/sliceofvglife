@@ -2,6 +2,16 @@
 
 .about {
     flex-grow: 1;
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+        color: $text-black-color;
+    }
+
+    a:hover {
+        color: $text-hover-color;
+    }
 }
 
 .text_wrapper {
