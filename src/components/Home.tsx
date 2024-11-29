@@ -1,5 +1,6 @@
 import React from "react";
 import Reader, { ReaderProps } from "./Reader";
+import { withRouter } from "next/router";
 
 type HomeProps = ReaderProps & {};
 
@@ -25,4 +26,4 @@ class Home extends React.Component<HomeProps> {
 
 Home.propTypes = {};
 
-export default Home;
+export default withRouter(Home);
