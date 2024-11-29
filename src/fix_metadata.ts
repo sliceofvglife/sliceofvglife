@@ -130,8 +130,11 @@ injectMetadata("index.html", genericMetadata(HEAD_TITLE));
     injectMetadata(`${config.page}.html`, pageMetadata(config.title));
 });
 
-collectComicsSync(readConfig({ path: "public/cdn/comics/comics.yml" })).forEach(
-    (comic) => {
-        injectMetadata(`comic/${comic.id}.html`, comicMetadata(comic));
-    }
-);
+collectComicsSync({
+    config: readConfig({ path: "public/cdn/comics/comics.yml" })
+}).forEach((comic) => {
+    injectMetadata(
+        `comic/${comic.metadata.id}.html`,
+        comicMetadata(comic.metadata)
+    );
+});

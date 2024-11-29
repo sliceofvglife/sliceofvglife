@@ -22,7 +22,7 @@
             transition: transform .2s;
         }
 
-        .item:hover .icon {
+        .item:not(.disabled):hover .icon {
             transform: scale(1.025);
         }
     }
@@ -45,28 +45,49 @@
     margin: 0;
     padding: 0;
 
+    .item_wrapper {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 0;
+    }
+
     .item {
         flex-grow: 0;
         display: flex;
         flex-direction: row;
         justify-content: center;
 
-        a {
-            width: fit-content;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-grow: 0;
+        .icon {
+            width: 2.5rem;
+            aspect-ratio: 1/1;
+            background-repeat: no-repeat;
+            background-size: contain;
+            image-rendering: pixelated;
+            background-position: bottom;
         }
     }
 
-    .icon {
-        width: 2.5rem;
-        aspect-ratio: 1/1;
-        background-repeat: no-repeat;
-        background-size: contain;
-        image-rendering: pixelated;
-        background-position: bottom;
+    .item.selected {
+        .icon {
+            filter: none;
+        }
+
+        a {
+            color: $text-selected-color;
+        }
+    }
+
+    .item.disabled {
+        .icon {
+            filter: grayscale(75%);
+        }
+
+        .title,
+        a {
+            color: gray;
+        }
     }
 
     .title {

@@ -6,14 +6,14 @@ import { collectComicsSync, generateRssFeed } from "@/lib/utils";
 import { getStaticProps as getStaticPropsComic } from "./comic/[id]";
 import Head from "next/head";
 import { HEAD_TITLE, META_TITLE } from "@/lib/const";
-import { ComicMetadata } from "@/components/Reader";
+import { Comic } from "@/components/Reader";
 
 export function getPageTitle(title: string): string {
     return [title, META_TITLE].join(" | ");
 }
 
-export function getComicTitle(comic: ComicMetadata): string {
-    return getPageTitle([comic.title, "Pokemon Anarchy"].join(" | "));
+export function getComicTitle(comic: Comic): string {
+    return getPageTitle([comic.metadata.title, comic.series.title].join(" | "));
 }
 
 export async function getStaticProps() {
@@ -22,7 +22,7 @@ export async function getStaticProps() {
 
     return await getStaticPropsComic({
         params: {
-            id: comics[comics.length - 1].id
+            id: comics[comics.length - 1].metadata.id
         }
     });
 }
@@ -44,8 +44,8 @@ export default function HomePage({
             <Home
                 comic={comic}
                 first={first}
-                previous={previous}
-                next={next}
+                previous={previous ?? undefined}
+                next={next ?? undefined}
                 last={last}
             />
         </>

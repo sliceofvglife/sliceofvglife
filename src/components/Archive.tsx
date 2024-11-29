@@ -8,6 +8,7 @@ import { NextRouter, withRouter } from "next/router";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import { UrlObject } from "url";
 
 const COMICS_UNLOCK_ALL = process.env.NEXT_PUBLIC_COMICS_UNLOCK_ALL === "1";
 const ARCHIVE_COMICS_COUNT =
@@ -17,6 +18,44 @@ const ARCHIVE_COMMENT_ICONS =
 const PAGE_SIZE = 15;
 export const XS_COL = 12;
 export const LG_COL = 8;
+
+const KONAMI_CODE = [
+    "ArrowUp",
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowLeft",
+    "ArrowRight"
+].join("");
+
+// Lightweight info about a category
+export interface CategoryMetadata {
+    id: string;
+    title: string;
+    src: string;
+    default: boolean;
+    row: number;
+}
+
+// Lightweight info about a series
+export type SeriesMetadata = CategoryMetadata & {
+    scale: number;
+};
+
+// Complete info about a series
+export interface Series {
+    metadata: SeriesMetadata;
+    categories: CategoryMetadata[];
+    games: CategoryMetadata[];
+    comics: ComicMetadata[];
+}
+
+type CategoryMetadataWithSeriesIds = {
+    category: CategoryMetadata;
+    seriesIds: string[];
+};
 
 function getComicKey(comic: ComicMetadata): string {
     return `comic-${comic.id}-unlocked`;
@@ -44,107 +83,200 @@ export function unlockComic(comic: ComicMetadata) {
     }
 }
 
-export interface CategoryMetadata {
-    id: string;
-    title: string;
-    src: string;
+export function unlockComics(comics: ComicMetadata[]) {
+    comics.forEach((comic) => unlockComic(comic));
+}
+
+function groupBy<I, K>(list: I[], keyGetter: (item: I) => K): Map<K, I[]> {
+    const map = new Map();
+    list.forEach((item) => {
+        const key = keyGetter(item);
+        const collection = map.get(key);
+        if (!collection) {
+            map.set(key, [item]);
+        } else {
+            collection.push(item);
+        }
+    });
+    return map;
+}
+
+function uniqueCategories(series: Series[]): CategoryMetadataWithSeriesIds[] {
+    return Object.values(
+        series.reduce((result: any, series: Series) => {
+            series.categories.forEach((category) => {
+                if (result[category.id] === undefined) {
+                    result[category.id] = {
+                        category,
+                        seriesIds: []
+                    };
+                }
+
+                result[category.id].seriesIds.push(series.metadata.id);
+            });
+            return result;
+        }, {})
+    );
 }
 
 type ArchiveProps = {
     className?: string;
-    categories: CategoryMetadata[];
-    games: CategoryMetadata[];
+    series: Series[];
+    currentSeriesId?: string;
+    currentCategoryId?: string;
     comics: ComicMetadata[];
     router: NextRouter;
 };
 
-class Archive extends React.Component<ArchiveProps> {
+type ArchiveState = {
+    input: string;
+    timeoutId?: number;
+};
+
+class Archive extends React.Component<ArchiveProps, ArchiveState> {
     static propTypes: any;
 
     constructor(props: any) {
         super(props);
+
+        this.state = { input: "" };
+
+        this.onKeyUp = this.onKeyUp.bind(this);
+        this.onTimeout = this.onTimeout.bind(this);
     }
 
-    renderCategories(currentCategory: string, categories: CategoryMetadata[]) {
+    componentDidMount(): void {
+        document.addEventListener("keyup", this.onKeyUp);
+    }
+
+    componentWillUnmount(): void {
+        document.removeEventListener("keyup", this.onKeyUp);
+        if (this.state.timeoutId !== undefined) {
+            clearTimeout(this.state.timeoutId);
+        }
+    }
+
+    onKeyUp(ev: KeyboardEvent): void {
+        if (this.state.timeoutId !== undefined) {
+            clearTimeout(this.state.timeoutId);
+        }
+
+        const input = this.state.input + ev.code;
+        if (input.includes(KONAMI_CODE)) {
+            unlockComics(this.props.comics);
+            alert("Vous avez débloqué tous les comics !");
+            this.onTimeout();
+        } else {
+            this.setState({
+                input,
+                timeoutId: window.setTimeout(this.onTimeout, 500)
+            });
+        }
+    }
+
+    onTimeout(): void {
+        this.setState({ input: "" });
+    }
+
+    renderCategories(options: {
+        categories: CategoryMetadataWithSeriesIds[];
+        isSelected: (item: CategoryMetadataWithSeriesIds) => boolean;
+        isDisabled: (item: CategoryMetadataWithSeriesIds) => boolean;
+        getCount: (item: CategoryMetadataWithSeriesIds) => number;
+        getHref: (item: CategoryMetadataWithSeriesIds) => string | UrlObject;
+    }) {
         /*Create the list of categories.
 
         Each category has an icon and title.
         Each category may also have a comment icon next to the title if all
         comics of that category have a comment.
         */
+        const renderCategory = (item: CategoryMetadataWithSeriesIds) => (
+            <>
+                <div
+                    className={styles.icon}
+                    style={{
+                        backgroundImage: `url("${item.category.src}")`
+                    }}
+                ></div>
+                <span className={styles.title}>
+                    {item.category.title}
+                    {ARCHIVE_COMICS_COUNT ? (
+                        <span>{`(${options.getCount(item)})`}</span>
+                    ) : (
+                        <></>
+                    )}
+                    {ARCHIVE_COMMENT_ICONS &&
+                    this.props.comics
+                        .filter((comic) =>
+                            comic.categoryIds.includes(item.category.id)
+                        )
+                        .every((comic) => comic.commentary !== "") ? (
+                        <span
+                            style={{
+                                marginLeft: "0.5em"
+                            }}
+                        >
+                            <Suspense fallback={<></>}>
+                                <FontAwesomeIcon
+                                    className={styles.commentary_icon}
+                                    icon={faCommentDots}
+                                />
+                            </Suspense>
+                        </span>
+                    ) : (
+                        <></>
+                    )}
+                </span>
+            </>
+        );
+
         return (
             <ul className={styles.filters_list}>
-                {categories.map((category) => (
+                {options.categories.map((item) => (
                     <li
                         className={[
                             styles.item,
-                            currentCategory === category.id
-                                ? styles.selected
-                                : ""
+                            options.isSelected(item) ? styles.selected : "",
+                            options.isDisabled(item) ? styles.disabled : ""
                         ].join(" ")}
-                        key={category.id}
+                        key={item.category.id}
                     >
-                        <Link
-                            href={{
-                                pathname: "",
-                                query:
-                                    category.id === "all"
-                                        ? {}
-                                        : { category: category.id }
-                            }}
-                        >
-                            <div
-                                className={styles.icon}
-                                style={{
-                                    backgroundImage: `url("${category.src}")`
-                                }}
-                            ></div>
-                            <span className={styles.title}>
-                                {category.title}
-                                {ARCHIVE_COMICS_COUNT ? (
-                                    <span>
-                                        {`(${
-                                            this.props.comics.filter((comic) =>
-                                                comic.category.includes(
-                                                    category.id
-                                                )
-                                            ).length
-                                        })`}
-                                    </span>
-                                ) : (
-                                    <></>
-                                )}
-                                {ARCHIVE_COMMENT_ICONS &&
-                                this.props.comics
-                                    .filter((comic) =>
-                                        comic.category.includes(category.id)
-                                    )
-                                    .every(
-                                        (comic) => comic.commentary !== ""
-                                    ) ? (
-                                    <span
-                                        style={{
-                                            marginLeft: "0.5em"
-                                        }}
-                                    >
-                                        <Suspense fallback={<></>}>
-                                            <FontAwesomeIcon
-                                                className={
-                                                    styles.commentary_icon
-                                                }
-                                                icon={faCommentDots}
-                                            />
-                                        </Suspense>
-                                    </span>
-                                ) : (
-                                    <></>
-                                )}
-                            </span>
-                        </Link>
+                        {options.isDisabled(item) ? (
+                            <div className={styles.item_wrapper}>
+                                {renderCategory(item)}
+                            </div>
+                        ) : (
+                            <Link
+                                className={styles.item_wrapper}
+                                href={options.getHref(item)}
+                            >
+                                {renderCategory(item)}
+                            </Link>
+                        )}
                     </li>
                 ))}
             </ul>
         );
+    }
+
+    renderSeries(options: {
+        series: Series[];
+        isSelected: (item: CategoryMetadataWithSeriesIds) => boolean;
+        isDisabled: (item: CategoryMetadataWithSeriesIds) => boolean;
+        getCount: (item: CategoryMetadataWithSeriesIds) => number;
+        getHref: (item: CategoryMetadataWithSeriesIds) => string | UrlObject;
+    }) {
+        return this.renderCategories({
+            categories: options.series.map((series) => ({
+                category: series.metadata,
+                seriesIds: [series.metadata.id]
+            })),
+            isSelected: options.isSelected,
+            isDisabled: options.isDisabled,
+            getCount: options.getCount,
+            getHref: options.getHref
+        });
     }
 
     renderComics(comics: ComicMetadata[]) {
@@ -212,30 +344,24 @@ class Archive extends React.Component<ArchiveProps> {
         );
     }
 
-    renderPages(numPages: number, currentPage: number, pageQuery: any) {
+    renderPages(options: {
+        numPages: number;
+        currentPage: number;
+        getHref: (page: number) => string | UrlObject;
+    }) {
         return (
             <ul className={styles.pages_list}>
-                {[...Array(numPages).keys()]
+                {[...Array(options.numPages).keys()]
                     .map((i) => i + 1)
                     .map((i) => (
                         <li
                             className={[
                                 styles.page_item,
-                                currentPage === i ? styles.selected : ""
+                                options.currentPage === i ? styles.selected : ""
                             ].join(" ")}
                             key={i.toString()}
                         >
-                            <Link
-                                href={{
-                                    pathname: "",
-                                    query: {
-                                        page: i.toString(),
-                                        ...pageQuery
-                                    }
-                                }}
-                            >
-                                {i}
-                            </Link>
+                            <Link href={options.getHref(i)}>{i}</Link>
                         </li>
                     ))}
             </ul>
@@ -246,10 +372,13 @@ class Archive extends React.Component<ArchiveProps> {
         const { className, router } = this.props;
         const { query } = router;
 
-        let currentCategory = query.category;
-        if (typeof currentCategory !== "string") {
-            currentCategory = "all";
-        }
+        const currentSeries = this.props.series.find(
+            (series) => series.metadata.id === this.props.currentSeriesId
+        );
+
+        const currentCategory = currentSeries?.categories?.find(
+            (category) => category.id === this.props.currentCategoryId
+        );
 
         let currentPage = Number(query.page);
         if (Number.isNaN(currentPage)) {
@@ -258,21 +387,14 @@ class Archive extends React.Component<ArchiveProps> {
 
         let comics = this.props.comics.filter(
             (comic) =>
-                currentCategory === "all" ||
-                comic.category.includes(currentCategory)
+                currentCategory === undefined ||
+                comic.categoryIds.includes(currentCategory.id)
         );
         const numPages = Math.max(Math.ceil(comics.length / PAGE_SIZE), 1);
         comics = comics.slice(
             (currentPage - 1) * PAGE_SIZE,
             currentPage * PAGE_SIZE
         );
-
-        const pageQuery =
-            currentCategory !== "all"
-                ? {
-                      category: currentCategory
-                  }
-                : {};
 
         return (
             <Container
@@ -284,14 +406,59 @@ class Archive extends React.Component<ArchiveProps> {
             >
                 <Row className="justify-content-center">
                     <Col className={styles.filters_col} xs={XS_COL} lg={LG_COL}>
-                        {this.renderCategories(
-                            currentCategory,
-                            this.props.categories
-                        )}
-                        {this.renderCategories(
-                            currentCategory,
-                            this.props.games
-                        )}
+                        {this.renderSeries({
+                            series: this.props.series,
+                            isSelected: ({ category }) =>
+                                category.id === currentSeries?.metadata?.id,
+                            isDisabled: () => false,
+                            getCount: () => this.props.comics.length,
+                            getHref: ({ category }) =>
+                                `/archive${
+                                    // Allow to deselect a series
+                                    category.id === currentSeries?.metadata?.id
+                                        ? ""
+                                        : `/${category.id}`
+                                }`
+                        })}
+                        {
+                            // Group categories by row number to have separate rows
+                            ...Object.values(
+                                Object.fromEntries(
+                                    groupBy(
+                                        uniqueCategories(this.props.series),
+                                        ({ category }) => category.row
+                                    )
+                                )
+                            ).map((rows) =>
+                                this.renderCategories({
+                                    categories: rows,
+                                    isSelected: ({ category }) =>
+                                        category.id === currentCategory?.id,
+                                    isDisabled: ({ seriesIds }) =>
+                                        currentSeries !== undefined &&
+                                        !seriesIds.includes(
+                                            currentSeries.metadata.id
+                                        ),
+                                    getCount: ({ category }) =>
+                                        this.props.comics.filter((comic) =>
+                                            comic.categoryIds.includes(
+                                                category.id
+                                            )
+                                        ).length,
+                                    getHref: (item) =>
+                                        `/archive/${
+                                            currentSeries?.metadata?.id ??
+                                            item.seriesIds[0]
+                                        }${
+                                            // Allow to deselect a category
+                                            item.category.id ===
+                                            currentCategory?.id
+                                                ? ""
+                                                : `/${item.category.id}`
+                                        }`
+                                })
+                            )
+                        }
                     </Col>
                 </Row>
                 <Row className="justify-content-center">
@@ -301,7 +468,24 @@ class Archive extends React.Component<ArchiveProps> {
                 </Row>
                 <Row className="justify-content-center">
                     <Col className={styles.pages_col} xs={XS_COL} lg={LG_COL}>
-                        {this.renderPages(numPages, currentPage, pageQuery)}
+                        {this.renderPages({
+                            numPages,
+                            currentPage,
+                            getHref: (page: number) => ({
+                                pathname: `/archive${
+                                    currentSeries === undefined
+                                        ? ""
+                                        : `/${currentSeries.metadata.id}${
+                                              currentCategory === undefined
+                                                  ? ""
+                                                  : `/${currentCategory.id}`
+                                          }`
+                                }`,
+                                query: {
+                                    page: page.toString()
+                                }
+                            })
+                        })}
                     </Col>
                 </Row>
             </Container>

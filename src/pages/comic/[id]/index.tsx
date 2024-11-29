@@ -15,10 +15,10 @@ export async function getStaticProps(context: any) {
     return {
         props: {
             comic,
-            first: comics[0],
-            previous: findComicById(comics, comic.previousId),
-            next: findComicById(comics, comic.nextId),
-            last: comics[comics.length - 1]
+            first: comics[0].metadata,
+            previous: findComicById(comics, comic.previousId)?.metadata ?? null,
+            next: findComicById(comics, comic.nextId)?.metadata ?? null,
+            last: comics[comics.length - 1].metadata
         }
     };
 }
@@ -38,7 +38,7 @@ export async function getStaticPaths() {
 
     comics.forEach((comic) => {
         // Add a path for the comic
-        result.paths.push({ params: { id: comic.id } });
+        result.paths.push({ params: { id: comic.metadata.id } });
     });
 
     return result;
@@ -63,8 +63,8 @@ export default function GamePage({
             <Reader
                 comic={comic}
                 first={first}
-                previous={previous}
-                next={next}
+                previous={previous ?? undefined}
+                next={next ?? undefined}
                 last={last}
             />
         </>

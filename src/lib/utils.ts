@@ -5,13 +5,12 @@ import YAML from "yaml";
 import { remark } from "remark";
 import imageSize from "image-size";
 import showdown from "showdown";
-import type { ComicMetadata } from "@/components/Reader";
-import { CategoryMetadata } from "@/components/Archive";
+import type { Comic, ComicMetadata } from "@/components/Reader";
+import { CategoryMetadata, Series, SeriesMetadata } from "@/components/Archive";
 import {
     COMICS_IMAGE_URL,
     COMICS_PUBLIC_DIR,
     COMICS_WEBP,
-    DEFAULT_GAME_CATEGORY,
     RSS_DESCRIPTION,
     RSS_TITLE,
     WEBSITE_URL
@@ -21,7 +20,15 @@ interface CategoryConfig {
     id: string;
     title: string;
     photo?: string;
+    default?: boolean;
 }
+
+type SeriesConfig = CategoryConfig & {
+    scale?: number;
+    categories?: CategoryConfig[];
+    games?: CategoryConfig[];
+    comics?: ComicConfig[];
+};
 
 interface ComicConfig {
     photo: string;
@@ -29,14 +36,12 @@ interface ComicConfig {
     version?: string;
     scale?: number;
     date: string;
-    category: string[];
+    category?: string[];
 }
 
 interface ComicsConfig {
     scale: number;
-    categories: CategoryConfig[];
-    games: CategoryConfig[];
-    comics: ComicConfig[];
+    series?: SeriesConfig[];
 }
 
 export function titleToId(title: string): string {
@@ -85,48 +90,15 @@ export function collectAbout(): Promise<string> {
     });
 }
 
-function collectCategoriesFrom(
-    what: "categories" | "games"
-): Promise<CategoryMetadata[]> {
-    return new Promise<CategoryMetadata[]>(async (resolve) => {
-        return resolve(
-            (what === "categories"
-                ? readConfig().categories
-                : readConfig().games
-            ).map((category) => {
-                const photo = category.photo ?? `${category.id}.png`;
-                const basename = photo.substring(0, photo.indexOf("."));
-
-                return {
-                    id: category.id,
-                    title: category.title,
-                    src: `${COMICS_IMAGE_URL}/${
-                        COMICS_WEBP ? `${basename}.webp` : photo
-                    }`
-                };
-            })
-        );
-    });
-}
-
-export function collectCategories(): Promise<CategoryMetadata[]> {
-    return collectCategoriesFrom("categories");
-}
-
-export function collectGames(): Promise<CategoryMetadata[]> {
-    return collectCategoriesFrom("games");
-}
-
-export function collectComicSync(
-    photo: string,
-    config?: ComicsConfig
-): ComicMetadata {
+function convertComicMetadata(options: {
+    series: Series;
+    comic: ComicConfig | ComicMetadata;
+}): ComicMetadata {
     // Read comic under comics repository
-    if (!config) {
-        config = readConfig();
-    }
+    const { series, comic } = options;
+    const games = series.games?.map((game) => game.id) ?? [];
+    const defaultGame = series.games?.find((game) => game.default === true)?.id;
 
-    const comic = config.comics.find((config) => config.photo == photo)!;
     const filename = path.join(COMICS_PUBLIC_DIR, comic.photo);
     const size = imageSize(filename);
     const id = titleToId(comic.title);
@@ -136,49 +108,147 @@ export function collectComicSync(
     const commentary = fs.existsSync(commentaryFilename)
         ? String(remark.processSync(fs.readFileSync(commentaryFilename)))
         : "";
-    const category = comic.category ?? [];
-    category.push("all");
-    if (!category.some((cat) => cat.startsWith("pokemon-"))) {
-        category.push(DEFAULT_GAME_CATEGORY);
+
+    const categoryIds =
+        ("category" in comic
+            ? comic.category
+            : "categoryIds" in comic
+            ? comic.categoryIds
+            : null) ?? [];
+
+    if (
+        defaultGame !== undefined &&
+        !categoryIds.some((cat) => games.includes(cat))
+    ) {
+        categoryIds.push(defaultGame);
     }
 
     return {
         id,
         photo: comicPhoto,
         title: comic.title,
-        category: category,
+        categoryIds: categoryIds,
         commentary,
-        scale: comic.scale ?? config.scale,
+        scale: comic.scale ?? options.series.metadata.scale,
         date: comic.date,
         href: `/comic/${id}`,
         url: `${WEBSITE_URL}/comic/${id}`,
-        src:
-            `${COMICS_IMAGE_URL}/${comicPhoto}` +
-            (comic.version !== undefined ? `?v=${comic.version}` : ""),
+        src: `${COMICS_IMAGE_URL}/${comicPhoto}`,
         width: size.width!,
         height: size.height!
     };
 }
 
-export function collectComicsSync(config?: ComicsConfig): ComicMetadata[] {
-    // Read comics under comics repository
-    if (!config) {
-        config = readConfig();
-    }
+function convertCategoryMetadata(category: CategoryConfig): CategoryMetadata {
+    const photo = category.photo ?? `${category.id}.png`;
+    const basename = photo.substring(0, photo.indexOf("."));
 
-    const comics = config.comics
-        .map((comic) => collectComicSync(comic.photo, config))
+    return {
+        id: category.id,
+        title: category.title,
+        src: `${COMICS_IMAGE_URL}/${COMICS_WEBP ? `${basename}.webp` : photo}`,
+        default: category.default === true,
+        row: 1
+    };
+}
+
+function convertComic(options: {
+    series: Series;
+    comic: ComicConfig | ComicMetadata;
+}): Comic {
+    // Read comic under comics repository
+    return {
+        metadata: convertComicMetadata(options),
+        series: options.series.metadata,
+        previousId: null,
+        nextId: null
+    };
+}
+
+function convertSeriesMetadata(series: SeriesConfig): SeriesMetadata {
+    return {
+        ...convertCategoryMetadata(series),
+        scale: series.scale ?? 1
+    };
+}
+
+function convertSeries(series: SeriesConfig): Series {
+    const result: Series = {
+        metadata: convertSeriesMetadata(series),
+        categories: [
+            ...(series.categories?.map(convertCategoryMetadata) ?? []),
+            ...(series.games?.map(convertCategoryMetadata) ?? []).map(
+                (game) => {
+                    // Put games on a separate row
+                    game.row = 2;
+                    return game;
+                }
+            )
+        ],
+        games: series.games?.map(convertCategoryMetadata) ?? [],
+        comics: []
+    };
+
+    result.comics =
+        series.comics?.map(
+            (comic) =>
+                convertComic({
+                    series: result,
+                    comic
+                }).metadata
+        ) ?? [];
+
+    return result;
+}
+
+export function collectSeriesSync(): Series[] {
+    return readConfig().series?.map(convertSeries) ?? [];
+}
+
+export function collectComicsSync(options?: {
+    seriesId?: string;
+    categoryId?: string;
+    config?: ComicsConfig;
+}): Comic[] {
+    // Read comics under comics repository
+    const config = options?.config ?? readConfig();
+    const comics = config.series
+        ?.filter(
+            (series) => !options?.seriesId || series.id === options.seriesId
+        )
+        .map((series) => convertSeries(series))
+        .map(
+            (series) =>
+                series.comics
+                    ?.map((comic) =>
+                        convertComic({
+                            series,
+                            comic
+                        })
+                    )
+                    ?.filter(
+                        (comic) =>
+                            comic !== undefined &&
+                            (!options?.categoryId ||
+                                comic.metadata.categoryIds.includes(
+                                    options.categoryId
+                                ))
+                    ) ?? []
+        )
+        .reduce((left, right) => left.concat(right))
         .sort(
-            (a, b) => new Date(a!.date).getTime() - new Date(b!.date).getTime()
-        );
+            (a, b) =>
+                new Date(a!.metadata.date).getTime() -
+                new Date(b!.metadata.date).getTime()
+        ) as Comic[];
 
     for (let i = 0; i < comics.length; ++i) {
         if (i > 0) {
-            comics[i].previousId = comics[i - 1].id;
+            comics[i].previousId = comics[i - 1].metadata.id;
         }
 
         if (i < comics.length - 1) {
-            comics[i].nextId = comics[i + 1].id;
+            comics[i].nextId = comics[i + 1].metadata.id;
         }
     }
 
@@ -193,13 +263,13 @@ export function findComicByPhoto(
 }
 
 export function findComicById(
-    comics: ComicMetadata[],
+    comics: Comic[],
     id?: string | null
-): ComicMetadata | null {
-    return id ? comics.find((comic) => comic.id == id) ?? null : null;
+): Comic | null {
+    return id ? comics.find((comic) => comic.metadata.id == id) ?? null : null;
 }
 
-export async function generateRssFeed(comics: ComicMetadata[]) {
+export async function generateRssFeed(comics: Comic[]) {
     const feedOptions = {
         title: RSS_TITLE,
         description: RSS_DESCRIPTION,
@@ -215,16 +285,18 @@ export async function generateRssFeed(comics: ComicMetadata[]) {
 
     comics.map((comic) => {
         feed.item({
-            title: `Pokemon Anarchy - ${comic.title}`,
-            description: `<a href="${comic.url}"><img src="${
-                comic.src
+            title: `${comic.series.title} - ${comic.metadata.title}`,
+            description: `<a href="${comic.metadata.url}"><img src="${
+                comic.metadata.src
             }" /><br/>Nouveau comics !</a><br/>Commentaire:<br/>${
-                comic.commentary
-                    ? new showdown.Converter().makeHtml(comic.commentary)
+                comic.metadata.commentary
+                    ? new showdown.Converter().makeHtml(
+                          comic.metadata.commentary
+                      )
                     : "<p>Aucun commentaire disponible</p>"
             }`,
-            url: comic.url,
-            date: new Date(comic.date)
+            url: comic.metadata.url,
+            date: new Date(comic.metadata.date)
         });
     });
 

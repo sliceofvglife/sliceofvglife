@@ -15,15 +15,17 @@ import {
     IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import ReactMarkdown from "react-markdown";
-import { LG_COL, unlockComic, XS_COL } from "./Archive";
+import { LG_COL, SeriesMetadata, unlockComic, XS_COL } from "./Archive";
 import Image from "next/image";
 import Link from "next/link";
+import { NextRouter, withRouter } from "next/router";
 
+// Lightweight info about a comic
 export interface ComicMetadata {
     id: string;
     photo: string;
     title: string;
-    category: string[];
+    categoryIds: string[];
     commentary: string;
     scale: number;
     date: string;
@@ -36,17 +38,24 @@ export interface ComicMetadata {
     // Size of the image
     width: number;
     height: number;
-    previousId?: string;
-    nextId?: string;
+}
+
+// Complete info about a comic
+export interface Comic {
+    metadata: ComicMetadata;
+    series: SeriesMetadata;
+    previousId: string | null;
+    nextId: string | null;
 }
 
 export type ReaderProps = {
     className?: string;
-    comic: ComicMetadata;
+    comic: Comic;
     first: ComicMetadata;
-    previous: ComicMetadata | null;
-    next: ComicMetadata | null;
+    previous?: ComicMetadata;
+    next?: ComicMetadata;
     last: ComicMetadata;
+    router: NextRouter;
 };
 
 class Reader extends React.Component<ReaderProps> {
@@ -54,6 +63,30 @@ class Reader extends React.Component<ReaderProps> {
 
     constructor(props: any) {
         super(props);
+
+        this.onKeyUp = this.onKeyUp.bind(this);
+    }
+
+    componentDidMount(): void {
+        document.addEventListener("keyup", this.onKeyUp);
+    }
+
+    componentWillUnmount(): void {
+        document.removeEventListener("keyup", this.onKeyUp);
+    }
+
+    onKeyUp(ev: KeyboardEvent): void {
+        if (ev.code === "ArrowLeft") {
+            const { previous } = this.props;
+            if (previous !== undefined) {
+                this.props.router.push(previous.href);
+            }
+        } else if (ev.code === "ArrowRight") {
+            const { next } = this.props;
+            if (next !== undefined) {
+                this.props.router.push(next.href);
+            }
+        }
     }
 
     render() {
@@ -68,13 +101,13 @@ class Reader extends React.Component<ReaderProps> {
                 icon: faBackwardFast,
                 label: "Aller au premier comic",
                 href: first.href,
-                enabled: first.id != comic.id
+                enabled: first.id != comic.metadata.id
             },
             {
                 icon: faBackward,
                 label: "Aller au comic précédent",
                 href: previous?.href ?? "",
-                enabled: first.id != comic.id
+                enabled: first.id != comic.metadata.id
             },
             {
                 icon: faTableList,
@@ -92,17 +125,17 @@ class Reader extends React.Component<ReaderProps> {
                 icon: faForward,
                 label: "Aller au comic suivant",
                 href: next?.href ?? "",
-                enabled: last.id != comic.id
+                enabled: last.id != comic.metadata.id
             },
             {
                 icon: faForwardFast,
                 label: "Aller au dernier comic",
                 href: last.href,
-                enabled: last.id != comic.id
+                enabled: last.id != comic.metadata.id
             }
         ];
 
-        unlockComic(comic);
+        unlockComic(comic.metadata);
 
         return (
             <Container
@@ -120,25 +153,34 @@ class Reader extends React.Component<ReaderProps> {
                     >
                         <article
                             className={styles.reader_wrapper}
-                            style={{ width: `${comic.width * comic.scale}px` }}
+                            style={{
+                                width: `${
+                                    comic.metadata.width * comic.metadata.scale
+                                }px`
+                            }}
                         >
                             <header>
-                                <h1 className={styles.title}>{comic.title}</h1>
+                                <h1 className={styles.title}>
+                                    {comic.metadata.title}
+                                </h1>
                             </header>
                             <div
                                 className={styles.image_wrapper}
                                 style={{
-                                    width: `${comic.width * comic.scale}px`
+                                    width: `${
+                                        comic.metadata.width *
+                                        comic.metadata.scale
+                                    }px`
                                 }}
                             >
                                 <Image
                                     className={styles.image}
-                                    src={comic.src}
-                                    alt={`image de ${comic.title.toLowerCase()}`}
-                                    width={`${comic.width}`}
-                                    height={`${comic.height}`}
+                                    src={comic.metadata.src}
+                                    alt={`image de ${comic.metadata.title.toLowerCase()}`}
+                                    width={`${comic.metadata.width}`}
+                                    height={`${comic.metadata.height}`}
                                     style={{
-                                        aspectRatio: `${comic.width}/${comic.height}`
+                                        aspectRatio: `${comic.metadata.width}/${comic.metadata.height}`
                                     }}
                                     priority={true}
                                     unoptimized
@@ -170,13 +212,15 @@ class Reader extends React.Component<ReaderProps> {
                             </div>
                             <section className={styles.info}>
                                 <footer className={styles.date}>
-                                    <div>Pokemon Anarchy</div>
-                                    {new Date(comic.date).toLocaleString()}
+                                    <div>{comic.series.title}</div>
+                                    {new Date(
+                                        comic.metadata.date
+                                    ).toLocaleString()}
                                 </footer>
                                 <div
                                     className={[
                                         styles.commentary,
-                                        comic.commentary === ""
+                                        comic.metadata.commentary === ""
                                             ? styles.no_commentary
                                             : ""
                                     ].join(" ")}
@@ -196,8 +240,8 @@ class Reader extends React.Component<ReaderProps> {
                                         </Suspense>
                                     </div>
                                     <ReactMarkdown>
-                                        {comic.commentary !== ""
-                                            ? comic.commentary
+                                        {comic.metadata.commentary !== ""
+                                            ? comic.metadata.commentary
                                             : "Aucun commentaire disponible"}
                                     </ReactMarkdown>
                                 </div>
@@ -212,4 +256,4 @@ class Reader extends React.Component<ReaderProps> {
 
 Reader.propTypes = {};
 
-export default Reader;
+export default withRouter(Reader);
