@@ -9,9 +9,9 @@
             <link>https://sliceofvglife.github.io/sliceofvglife</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 29 Nov 2024 18:52:11 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 01 Dec 2024 18:48:29 GMT</lastBuildDate>
         <atom:link href="https://sliceofvglife.github.io/sliceofvglife/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 29 Nov 2024 18:52:11 GMT</pubDate>
+        <pubDate>Sun, 01 Dec 2024 18:48:29 GMT</pubDate>
         <copyright><![CDATA[Tous droits réservés 2024]]></copyright>
         <language><![CDATA[fr-fr]]></language>
         <item>
@@ -767,6 +767,21 @@ mélange de sueur et… bref…</p>
             <link>https://sliceofvglife.github.io/sliceofvglife/comic/pub-n33</link>
             <guid isPermaLink="true">https://sliceofvglife.github.io/sliceofvglife/comic/pub-n33</guid>
             <pubDate>Sun, 07 Feb 2010 14:26:54 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Pokemon Anarchy Rebirth - Contre des vues]]></title>
+            <description><![CDATA[<a href="https://sliceofvglife.github.io/sliceofvglife/comic/contre-des-vues"><img src="https://cdn.statically.io/gh/sliceofvglife/comics/main/cdv.webp" /><br/>Nouveau comics !</a><br/>Commentaire:<br/><p>Aucun commentaire disponible</p>]]></description>
+            <link>https://sliceofvglife.github.io/sliceofvglife/comic/contre-des-vues</link>
+            <guid isPermaLink="true">https://sliceofvglife.github.io/sliceofvglife/comic/contre-des-vues</guid>
+            <pubDate>Sat, 30 Nov 2024 09:34:45 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Pokemon Anarchy Rebirth - Just a Chill Guy]]></title>
+            <description><![CDATA[<a href="https://sliceofvglife.github.io/sliceofvglife/comic/just-a-chill-guy"><img src="https://cdn.statically.io/gh/sliceofvglife/comics/main/jacg.webp" /><br/>Nouveau comics !</a><br/>Commentaire:<br/><p>Avec l'équipe on a croisé ce type dans un centre commercial.</p>
+<p>On a été tellement étonné par sa chillitude, qu’on a voulu immortaliser le moment.</p>]]></description>
+            <link>https://sliceofvglife.github.io/sliceofvglife/comic/just-a-chill-guy</link>
+            <guid isPermaLink="true">https://sliceofvglife.github.io/sliceofvglife/comic/just-a-chill-guy</guid>
+            <pubDate>Sun, 01 Dec 2024 17:34:04 GMT</pubDate>
         </item>
     </channel>
 </rss>
