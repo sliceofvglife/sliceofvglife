@@ -9,9 +9,9 @@
             <link>https://sliceofvglife.github.io/sliceofvglife</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sun, 01 Dec 2024 18:48:29 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 03 Dec 2024 07:47:11 GMT</lastBuildDate>
         <atom:link href="https://sliceofvglife.github.io/sliceofvglife/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Sun, 01 Dec 2024 18:48:29 GMT</pubDate>
+        <pubDate>Tue, 03 Dec 2024 07:47:11 GMT</pubDate>
         <copyright><![CDATA[Tous droits réservés 2024]]></copyright>
         <language><![CDATA[fr-fr]]></language>
         <item>
@@ -782,6 +782,13 @@ mélange de sueur et… bref…</p>
             <link>https://sliceofvglife.github.io/sliceofvglife/comic/just-a-chill-guy</link>
             <guid isPermaLink="true">https://sliceofvglife.github.io/sliceofvglife/comic/just-a-chill-guy</guid>
             <pubDate>Sun, 01 Dec 2024 17:34:04 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Pokemon Anarchy Rebirth - Critique n°5]]></title>
+            <description><![CDATA[<a href="https://sliceofvglife.github.io/sliceofvglife/comic/critique-n5"><img src="https://cdn.statically.io/gh/sliceofvglife/comics/main/c5.webp" /><br/>Nouveau comics !</a><br/>Commentaire:<br/><p>Aucun commentaire disponible</p>]]></description>
+            <link>https://sliceofvglife.github.io/sliceofvglife/comic/critique-n5</link>
+            <guid isPermaLink="true">https://sliceofvglife.github.io/sliceofvglife/comic/critique-n5</guid>
+            <pubDate>Wed, 04 Dec 2024 22:04:25 GMT</pubDate>
         </item>
     </channel>
 </rss>
