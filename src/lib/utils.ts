@@ -216,7 +216,7 @@ export function collectComicsSync(options?: {
         ?.filter(
             (series) => !options?.seriesId || series.id === options.seriesId
         )
-        .map((series) => convertSeries(series))
+        .map(convertSeries)
         .map(
             (series) =>
                 series.comics

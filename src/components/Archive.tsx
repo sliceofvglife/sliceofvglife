@@ -369,15 +369,18 @@ class Archive extends React.Component<ArchiveProps, ArchiveState> {
     }
 
     render() {
-        const { className, router } = this.props;
+        const { className, router, currentCategoryId } = this.props;
         const { query } = router;
 
-        const currentSeries = this.props.series.find(
-            (series) => series.metadata.id === this.props.currentSeriesId
-        );
+        const currentSeries = this.props.currentSeriesId
+            ? this.props.series.find(
+                  (series) => series.metadata.id === this.props.currentSeriesId
+              )
+            : undefined;
+        const currentSeriesId = this.props.currentSeriesId ?? "all";
 
         const currentCategory = currentSeries?.categories?.find(
-            (category) => category.id === this.props.currentCategoryId
+            (category) => category.id === currentCategoryId
         );
 
         let currentPage = Number(query.page);
@@ -409,13 +412,16 @@ class Archive extends React.Component<ArchiveProps, ArchiveState> {
                         {this.renderSeries({
                             series: this.props.series,
                             isSelected: ({ category }) =>
-                                category.id === currentSeries?.metadata?.id,
+                                category.id === currentSeriesId,
                             isDisabled: () => false,
                             getCount: () => this.props.comics.length,
                             getHref: ({ category }) =>
                                 `/archive${
-                                    // Allow to deselect a series
-                                    category.id === currentSeries?.metadata?.id
+                                    // Allow to deselect a series.
+                                    //
+                                    // When we select or deselect: we always clear
+                                    // the selected category and page.
+                                    category.id === currentSeriesId
                                         ? ""
                                         : `/${category.id}`
                                 }`
@@ -433,12 +439,10 @@ class Archive extends React.Component<ArchiveProps, ArchiveState> {
                                 this.renderCategories({
                                     categories: rows,
                                     isSelected: ({ category }) =>
-                                        category.id === currentCategory?.id,
+                                        category.id === currentCategoryId,
                                     isDisabled: ({ seriesIds }) =>
                                         currentSeries !== undefined &&
-                                        !seriesIds.includes(
-                                            currentSeries.metadata.id
-                                        ),
+                                        !seriesIds.includes(currentSeriesId),
                                     getCount: ({ category }) =>
                                         this.props.comics.filter((comic) =>
                                             comic.categoryIds.includes(
@@ -447,14 +451,25 @@ class Archive extends React.Component<ArchiveProps, ArchiveState> {
                                         ).length,
                                     getHref: (item) =>
                                         `/archive/${
-                                            currentSeries?.metadata?.id ??
-                                            item.seriesIds[0]
-                                        }${
-                                            // Allow to deselect a category
+                                            // Allow to deselect a category.
+                                            //
+                                            // When we select: if no series is selected,
+                                            // then we want to select "all" series. Otherwise
+                                            // we keep the selected series.
+                                            //
+                                            // When we deselect: if the series in the URL
+                                            // is "all" then we want to also remove the
+                                            // series. Otherwise we keep the selected series.
+                                            //
+                                            // In both case we clear the selected page.
                                             item.category.id ===
-                                            currentCategory?.id
-                                                ? ""
-                                                : `/${item.category.id}`
+                                            currentCategoryId
+                                                ? currentSeriesId !==
+                                                      undefined &&
+                                                  currentSeriesId !== "all"
+                                                    ? `/${currentSeriesId}`
+                                                    : ""
+                                                : `/${currentSeriesId}/${item.category.id}`
                                         }`
                                 })
                             )
@@ -473,13 +488,14 @@ class Archive extends React.Component<ArchiveProps, ArchiveState> {
                             currentPage,
                             getHref: (page: number) => ({
                                 pathname: `/archive${
-                                    currentSeries === undefined
-                                        ? ""
-                                        : `/${currentSeries.metadata.id}${
-                                              currentCategory === undefined
-                                                  ? ""
-                                                  : `/${currentCategory.id}`
+                                    // Keep the selected series and category if any
+                                    this.props.currentSeriesId
+                                        ? `/${this.props.currentSeriesId}${
+                                              currentCategoryId
+                                                  ? `/${currentCategoryId}`
+                                                  : ""
                                           }`
+                                        : ""
                                 }`,
                                 query: {
                                     page: page.toString()

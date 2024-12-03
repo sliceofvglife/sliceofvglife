@@ -1,6 +1,6 @@
 const SITE_URL = process.env.SITE_URL || "https://www.sliceofvglife.com";
 
-const exclude = ["/random*"];
+const exclude = ["/random*", "/archive*"];
 
 const NEXT_SSG_FILES = [
     "/*.json$",

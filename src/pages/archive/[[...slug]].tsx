@@ -11,24 +11,19 @@ export async function getStaticProps(context: any) {
     const { params } = context;
     const { slug } = params;
     const series = await collectSeriesSync();
-    const currentSeries =
-        slug?.length > 0
-            ? series.find((s) => s.metadata.id === slug[0])!
-            : null;
-    const currentCategory =
-        slug?.length > 1
-            ? currentSeries?.categories?.find((c) => c.id === slug[1])
-            : null;
+    const currentSeriesId = slug?.length > 0 ? slug[0] : undefined;
+    const currentSeries = series.find((s) => s.metadata.id === currentSeriesId);
+    const currentCategoryId = slug?.length > 1 ? slug[1] : undefined;
 
     return {
         props: {
             series,
             comics: collectComicsSync({
                 seriesId: currentSeries?.metadata?.id,
-                categoryId: currentCategory?.id
+                categoryId: currentCategoryId
             }).map((comic) => comic.metadata),
-            currentSeriesId: currentSeries?.metadata?.id ?? null,
-            currentCategoryId: currentCategory?.id ?? null
+            currentSeriesId: currentSeriesId ?? null,
+            currentCategoryId: currentCategoryId ?? null
         }
     };
 }
@@ -46,13 +41,21 @@ export async function getStaticPaths() {
         fallback: false
     };
 
+    // Add the all series path
+    result.paths.push({ params: { slug: ["all"] } });
+
+    // Add paths for each series
     (await collectSeriesSync()).forEach(async (series) => {
         result.paths.push({ params: { slug: [series.metadata.id] } });
-        series.categories.forEach((category) =>
-            result.paths.push({
-                params: { slug: [series.metadata.id, category.id] }
-            })
-        );
+
+        // Add paths for each category
+        series.categories.forEach((category) => {
+            [series.metadata.id, "all"].forEach((seriesId) =>
+                result.paths.push({
+                    params: { slug: [seriesId, category.id] }
+                })
+            );
+        });
     });
 
     return result;
