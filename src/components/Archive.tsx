@@ -450,7 +450,7 @@ class Archive extends React.Component<ArchiveProps, ArchiveState> {
                                             )
                                         ).length,
                                     getHref: (item) =>
-                                        `/archive/${
+                                        `/archive${
                                             // Allow to deselect a category.
                                             //
                                             // When we select: if no series is selected,
