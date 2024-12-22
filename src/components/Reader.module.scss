@@ -79,6 +79,10 @@ a.toolbar_disabled {
         width: 100%;
     }
 
+    @include media-breakpoint-up(md) {
+        width: 100%;
+    }
+
     .date {
         font-size: 1rem;
         text-align: center;
@@ -93,6 +97,8 @@ a.toolbar_disabled {
     @include media-breakpoint-down(md) {
         width: 100%;
     }
+
+    max-width: 42rem;
 
     padding: 2rem;
     padding-top: 1rem;
