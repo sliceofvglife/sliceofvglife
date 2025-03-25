@@ -2,7 +2,7 @@
 
 .archive {
     flex-grow: 1;
-    font-family: consolas;
+    font-family: $consolas-font-family;
 
     a {
         color: $text-black-color;
@@ -130,7 +130,7 @@
         // Avoid taking up the space of image and fill parent's width
         position: absolute;
         width: 100%;
-        font-family: consolas;
+        font-family: $consolas-font-family;
         // Avoid text covered by image when scale up on hover
         padding-top: 0.25rem;
         // Avoid too much space between lines

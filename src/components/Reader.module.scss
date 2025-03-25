@@ -69,7 +69,7 @@ a.toolbar_disabled {
 }
 
 .info {
-    font-family: consolas;
+    font-family: $consolas-font-family;
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
